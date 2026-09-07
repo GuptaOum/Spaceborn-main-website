@@ -140,27 +140,147 @@ export default function LaunchesPage() {
           </div>
         </section>
 
-        <section className="launches-table-section">
-          <div className="launches-container">
-            <h2 className="launches-table-heading font-ethno">UPCOMING LAUNCHES</h2>
-            
-            <div className="launches-table">
-              <div className="launches-table-header font-mono">
-                <div className="col-project">PROJECT</div>
-                <div className="col-classification">CLASSIFICATION</div>
-                <div className="col-date">TARGET DATE</div>
-              </div>
-              
-              <div className="launches-table-body font-mono">
-                {upcomingLaunches.map((launch, index) => (
-                  <div className="launches-table-row" key={index}>
-                    <div className="col-project">{launch.project}</div>
-                    <div className="col-classification">{launch.classification}</div>
-                    <div className="col-date">{launch.date}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* <section className="launches-table-section"> */}
+  <div className="launches-container">
+    <h2 className="launches-table-heading font-ethno">
+      UPCOMING LAUNCHES
+    </h2>
+
+    <div className="launches-table">
+      <div className="launches-table-header font-mono">
+        <div className="col-project">PROJECT</div>
+        <div className="col-classification">CLASSIFICATION</div>
+        <div className="col-date">TARGET DATE</div>
+      </div>
+
+      <div className="launches-table-body font-mono">
+        <div className="launches-table-row">
+          <div className="col-project">STM32 boot-up and working</div>
+          <div className="col-classification">Execution Runtime</div>
+          <div className="col-date">1 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">VISIONWS</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">4 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">H7</div>
+          <div className="col-classification">Hardware</div>
+          <div className="col-date">5 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Power &amp; Battery Simulator</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">6 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Control Stack Validation v2</div>
+          <div className="col-classification">Control Logic</div>
+          <div className="col-date">7 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">DERYK Website</div>
+          <div className="col-classification">Platform &amp; DevOps</div>
+          <div className="col-date">11 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Security Runtime</div>
+          <div className="col-classification">FSM</div>
+          <div className="col-date">12 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">HPUs Documentation</div>
+          <div className="col-classification">Hardware</div>
+          <div className="col-date">14 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">HAL Simulator v1</div>
+          <div className="col-classification">Platform &amp; DevOps</div>
+          <div className="col-date">14 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Complete Execution Runtime + Integration</div>
+          <div className="col-classification">Execution Runtime</div>
+          <div className="col-date">15 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Production-Level Stack</div>
+          <div className="col-classification">Sensor Stack / HAL</div>
+          <div className="col-date">15 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Production Level</div>
+          <div className="col-classification">FSM</div>
+          <div className="col-date">15 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">GUI Complete</div>
+          <div className="col-classification">Sensor Stack / HAL</div>
+          <div className="col-date">16 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Communication &amp; Network Simulator</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">17 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">ANSA Website</div>
+          <div className="col-classification">Platform &amp; DevOps</div>
+          <div className="col-date">18 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Component Selection</div>
+          <div className="col-classification">Hardware</div>
+          <div className="col-date">19 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Manufacturing &amp; Industry Simulator</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">19 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Production-Level Control Logic</div>
+          <div className="col-classification">Control Logic</div>
+          <div className="col-date">19 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Spaceborn Scratch Simulator</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">20 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">HPU Visual</div>
+          <div className="col-classification">Hardware</div>
+          <div className="col-date">30 SEP</div>
+        </div>
+
+        <div className="launches-table-row">
+          <div className="col-project">Humanoid Simulator</div>
+          <div className="col-classification">Robotics &amp; Simulation</div>
+          <div className="col-date">30 SEP</div>
+        </div>
+      </div>
+    </div>
 
             {pastLaunches.length > 0 && (
               <>
@@ -186,9 +306,9 @@ export default function LaunchesPage() {
               </>
             )}
           </div>
-        </section>
-      </main>
-      <Footer isHome={false} />
-    </>
-  );
-}
+        
+    </main>
+
+    <Footer isHome={false} />
+  </>
+)}
