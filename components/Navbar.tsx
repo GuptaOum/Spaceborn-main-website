@@ -161,7 +161,7 @@ export default function Navbar() {
             );
           })}
           <li>
-            <Link href="/#deryk">DERYK</Link>
+            <Link href="/deryk">DERYK</Link>
           </li>
           <li>
             <a href="https://khonsu.in" target="_blank" rel="noopener noreferrer">

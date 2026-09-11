@@ -151,7 +151,7 @@ export default function MobileMenu({ isCareer }: { isCareer?: boolean }) {
 
               {/* Independent Links */}
               <li>
-                <Link href="/#deryk" onClick={toggleMenu}>
+                <Link href="/deryk" onClick={toggleMenu}>
                   DERYK
                 </Link>
               </li>
