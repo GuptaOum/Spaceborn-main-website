@@ -7,8 +7,6 @@ import UpcomingLaunches from './UpcomingLaunches';
 
 export type DropdownKey = 'platforms' | 'simulation' | 'systems' | 'industries' | 'company';
 
-export const DERYK_URL = 'https://github.com/Sarthak-Developer-Coder/deryk_landing-page';
-
 type NavItem = {
   label: string;
   href: string;
@@ -163,9 +161,7 @@ export default function Navbar() {
             );
           })}
           <li>
-            <a href={DERYK_URL} target="_blank" rel="noopener noreferrer">
-              DERYK
-            </a>
+            <Link href="/deryk">DERYK</Link>
           </li>
           <li>
             <a href="https://khonsu.in" target="_blank" rel="noopener noreferrer">

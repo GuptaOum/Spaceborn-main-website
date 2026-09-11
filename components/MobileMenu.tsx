@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { DERYK_URL, DROPDOWN_NAV, DropdownKey } from './Navbar';
+import { DROPDOWN_NAV, DropdownKey } from './Navbar';
 import { DEFAULT_LAUNCHES, sortLaunches, formatTimeLocal } from './UpcomingLaunches';
 
 export default function MobileMenu({ isCareer }: { isCareer?: boolean }) {
@@ -151,9 +151,9 @@ export default function MobileMenu({ isCareer }: { isCareer?: boolean }) {
 
               {/* Independent Links */}
               <li>
-                <a href={DERYK_URL} target="_blank" rel="noopener noreferrer" onClick={toggleMenu}>
+                <Link href="/deryk" onClick={toggleMenu}>
                   DERYK
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="https://khonsu.in" target="_blank" rel="noopener noreferrer" onClick={toggleMenu}>
