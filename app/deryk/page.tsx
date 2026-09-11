@@ -26,7 +26,7 @@ function SectionHeading({ eyebrow, title, copy }: { eyebrow: string; title: stri
 }
 
 function Brand() {
-  return <span className="deryk-brand"><i /><i /><i /><b>DERYK</b><small>MVP-1</small></span>;
+  return <span className="deryk-brand" aria-hidden="true"><i /><i /><i /></span>;
 }
 
 export default function DerykPage() {
@@ -53,7 +53,7 @@ export default function DerykPage() {
 
       <section className="deryk-section deryk-masks"><div><SectionHeading eyebrow="05 / Telemetry & capability masks" title="Missing is a valid signal." copy="Different connectors expose different sensors. DERYK reports reality as it is, including what a machine cannot measure." /><div className="not-measured"><b>—</b><span><strong>Not Measured</strong><small>No fabricated zeroes. No false confidence.</small></span></div></div><div className="coverage"><header>FIELD COVERAGE <span>66 TOTAL FIELDS</span></header><label>Certainty <b>45 / 66 fields</b><i><em style={{ width: '68%' }} /></i></label><label>Lidar Simulator <b>11 / 66 fields</b><i><em className="dim" style={{ width: '17%' }} /></i></label><small>● measured &nbsp;&nbsp; ○ not measured</small></div></section>
 
-      <section className="deryk-section deryk-workflow"><SectionHeading eyebrow="06 / Mission loop" title="From intent to evidence." /><div>{['Type mission', 'AI plan', 'Gate verification', 'Execute', 'Export telemetry', 'Replay & audit'].map((step, index) => <span key={step}><b className={index === 2 ? 'gate-dot' : ''}>{String(index + 1).padStart(2, '0')}</b>{step}</span>)}</div></section>
+      <section className="deryk-section deryk-workflow"><SectionHeading eyebrow="06 / Mission loop" title="Intent to evidence." /><div>{['Type mission', 'AI plan', 'Gate verification', 'Execute', 'Export telemetry', 'Replay & audit'].map((step, index) => <span key={step}><b className={index === 2 ? 'gate-dot' : ''}>{String(index + 1).padStart(2, '0')}</b>{step}</span>)}</div></section>
 
       <section className="deryk-section deryk-faq" id="faq"><SectionHeading eyebrow="07 / Questions, answered" title="The short version." copy="Precise answers for teams evaluating the flight layer." /><div>{faqs.map(([question, answer], index) => <article className={openFaq === index ? 'open' : ''} key={question}><button onClick={() => setOpenFaq(openFaq === index ? -1 : index)} aria-expanded={openFaq === index}>{question}<ChevronDown size={17} /></button><p>{answer}</p></article>)}</div></section>
 
