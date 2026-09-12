@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, BarChart3, Check, ChevronDown, Database, LockKeyhole, Network, Radar, ShieldCheck, Sparkles, Terminal, Zap } from 'lucide-react';
+import DroneAvatar from './DroneAvatar';
 import './deryk.css';
 
 const architecture = [
@@ -83,7 +84,7 @@ export default function DerykPage() {
     <main>
       <section className="deryk-hero">
         <div className="deryk-hero-copy"><span className="deryk-pill"><b /> AUTONOMY, WITH RECEIPTS</span><h1>Provable AI copilot for <em>autonomous drones.</em></h1><p>Natural-language mission planning with deterministic safety enforcement, connector-based execution, and an auditable telemetry logbook.</p><div className="deryk-actions"><a className="deryk-button primary" href="#studios">Launch console <ArrowRight size={16} /></a><a className="deryk-button secondary" href="#architecture">See how it works</a></div><div className="deryk-proof"><span><Check size={14} /> LLM-free safety boundary</span><span><Check size={14} /> Simulator-ready connectors</span></div><div className="deryk-hero-meta"><span><b>01</b> MISSION CONTROL</span><span><b>07:42:18</b> UTC / NOMINAL</span><span><b>66</b> TELEMETRY FIELDS</span></div></div>
-        <div className="deryk-radar" aria-label="Live mission safety telemetry visualization"><div className="radar-crosshair" /><div className="radar-ring one" /><div className="radar-ring two" /><div className="radar-ring three" /><div className="radar-sweep" /><div className="drone-mark"><i /><i /><i /><b /></div><div className="radar-beam" /><div className="deryk-signal top"><b /> GATE / READY <strong>99.98%</strong></div><div className="deryk-signal bottom"><small>ACTIVE MISSION</small><strong>OPIP-2048</strong><span>ALT <b>124.6 m</b></span></div><span className="radar-coordinate coordinate-one">18° 32' 44.2" N</span><span className="radar-coordinate coordinate-two">73° 51' 18.6" E</span><span className="radar-coordinate coordinate-three">VECTOR / 042°</span></div>
+        <DroneAvatar />
       </section>
 
       <div className="deryk-trust"><span>Designed for teams shipping autonomy</span><b>SIMULATION</b><b>ROBOTICS</b><b>AEROSPACE</b><b>MISSION OPS</b></div>
