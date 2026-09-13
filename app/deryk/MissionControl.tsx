@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Check, ChevronDown, CircleDot, LockKeyhole, Network, Radio, ShieldCheck, Terminal, Waves, Zap } from 'lucide-react';
 import './mission-control.css';
 
@@ -26,13 +26,13 @@ function Mark() { return <span className="mc-mark" aria-hidden="true"><i /><i />
 function AirspaceMap({ compact = false }: { compact?: boolean }) {
   return <div className={`airspace-map ${compact ? 'compact' : ''}`}>
     <svg viewBox="0 0 700 390" role="img" aria-label="Conceptual mission route visualization">
-      <defs><linearGradient id="route" x1="0" x2="1"><stop stopColor="#06D4F5" stopOpacity=".15" /><stop offset=".5" stopColor="#06D4F5" /><stop offset="1" stopColor="#6495ED" /></linearGradient><filter id="mapGlow"><feGaussianBlur stdDeviation="3" /></filter></defs>
+      <defs><linearGradient id="route" x1="0" x2="1"><stop stopColor="#477B2B" stopOpacity=".15" /><stop offset=".5" stopColor="#477B2B" /><stop offset="1" stopColor="#111513" /></linearGradient><filter id="mapGlow"><feGaussianBlur stdDeviation="3" /></filter></defs>
       <g className="map-grid"><path d="M0 65H700M0 130H700M0 195H700M0 260H700M0 325H700M70 0V390M140 0V390M210 0V390M280 0V390M350 0V390M420 0V390M490 0V390M560 0V390M630 0V390" /></g>
       <path className="contour contour-one" d="M-20 290 C100 210 130 360 270 270 S460 180 720 250" /><path className="contour contour-two" d="M-40 180 C100 80 185 240 325 145 S520 60 740 130" />
       <path className="geofence" d="M85 75 L590 52 L642 300 L170 344 Z" />
       <path className="route-shadow" d="M112 285 C160 240 187 112 290 134 S365 278 448 246 S513 118 585 87" /><motion.path className="route-line" d="M112 285 C160 240 187 112 290 134 S365 278 448 246 S513 118 585 87" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2.4, ease: 'easeInOut' }} />
-      {[['WP-01', 112, 285], ['WP-02', 210, 126], ['WP-03', 365, 270], ['WP-04', 585, 87]].map(([label, x, y], index) => <g className="waypoint" key={label as string}><circle cx={x as number} cy={y as number} r="7" /><circle cx={x as number} cy={y as number} r="14" /><text x={(x as number) + 14} y={(y as number) - 12}>{label as string}</text><motion.circle cx={x as number} cy={y as number} r="20" fill="none" stroke="#06D4F5" initial={{ opacity: 0 }} animate={{ opacity: [0, .7, 0], scale: [0.7, 1.25, 1.25] }} transition={{ duration: 2.4, delay: index * .45, repeat: Infinity }} /></g>)}
-      <motion.g className="map-drone" animate={{ x: [0, 95, 245, 336, 473], y: [0, -88, 0, -39, -198] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}><path d="M-12 0 L0 -7 L18 0 L0 7Z" fill="#F8FAFC" /><circle cx="0" cy="0" r="3" fill="#06D4F5" /></motion.g>
+      {[['WP-01', 112, 285], ['WP-02', 210, 126], ['WP-03', 365, 270], ['WP-04', 585, 87]].map(([label, x, y], index) => <g className="waypoint" key={label as string}><circle cx={x as number} cy={y as number} r="7" /><circle cx={x as number} cy={y as number} r="14" /><text x={(x as number) + 14} y={(y as number) - 12}>{label as string}</text><motion.circle cx={x as number} cy={y as number} r="20" fill="none" stroke="#477B2B" initial={{ opacity: 0 }} animate={{ opacity: [0, .7, 0], scale: [0.7, 1.25, 1.25] }} transition={{ duration: 2.4, delay: index * .45, repeat: Infinity }} /></g>)}
+      <motion.g className="map-drone" animate={{ x: [0, 95, 245, 336, 473], y: [0, -88, 0, -39, -198] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}><path d="M-12 0 L0 -7 L18 0 L0 7Z" fill="#111513" /><circle cx="0" cy="0" r="3" fill="#477B2B" /></motion.g>
       <g className="map-label"><text x="34" y="35">AIRSPACE / DEMO ENVIRONMENT</text><text x="530" y="365">ALT RINGS / 124.6 m</text><text x="20" y="370">18° 32' 44.2" N</text></g>
     </svg>
     <div className="map-readout"><span><b className="live-dot" /> MISSION ACTIVE</span><strong>OPIP-2048</strong><small>SIMULATED ROUTE / NOT LIVE HARDWARE</small></div>
@@ -59,17 +59,6 @@ function Logbook() {
 function DerykPage() {
   const [activeStage, setActiveStage] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const pointerX = useMotionValue(0);
-  const pointerY = useMotionValue(0);
-  const springX = useSpring(pointerX, { stiffness: 80, damping: 20 });
-  const springY = useSpring(pointerY, { stiffness: 80, damping: 20 });
-
-  useEffect(() => {
-    const move = (event: PointerEvent) => { pointerX.set((event.clientX / window.innerWidth - .5) * 2); pointerY.set((event.clientY / window.innerHeight - .5) * 2); };
-    window.addEventListener('pointermove', move, { passive: true });
-    return () => window.removeEventListener('pointermove', move);
-  }, [pointerX, pointerY]);
-
   const active = lifecycle[activeStage];
   const ActiveIcon = active.icon;
   const matrix = useMemo(() => Array.from({ length: 66 }, (_, index) => index), []);
@@ -78,7 +67,7 @@ function DerykPage() {
     <header className="mission-nav"><a href="#top" aria-label="DERYK home"><Mark /><span>DERYK</span></a><span className="mission-nav-status"><i /> SYSTEM / DERYK-01</span><nav><a href="#lifecycle">Lifecycle</a><a href="#studios">Studios</a><a href="#safety">Safety</a><a href="#logbook">Logbook</a><a className="mission-nav-button" href="#connect">Enter mission control <ArrowRight size={13} /></a></nav></header>
 
     <main>
-      <section className="mission-hero"><div className="hero-editorial"><span className="eyebrow">DERYK / AUTONOMOUS MISSION SYSTEM</span><h1>Autonomy,<br /><em>with receipts.</em></h1><p>A mission-control intelligence layer for planning, enforcing, executing and observing autonomous operations.</p><div className="hero-actions"><a className="mission-button primary" href="#lifecycle">Enter mission control <ArrowRight size={15} /></a><a className="mission-button text" href="#studios">Explore DERYK <ArrowDownRight size={15} /></a></div><div className="hero-footnote"><span>SIMULATED DEMO ENVIRONMENT</span><span>NO LIVE HARDWARE CONNECTED</span></div></div><motion.div className="hero-airspace" style={{ x: springX, y: springY }}><AirspaceMap /></motion.div></section>
+      <section className="mission-hero"><div className="hero-editorial"><span className="eyebrow">DERYK / AUTONOMOUS MISSION SYSTEM</span><h1>Autonomy,<br /><em>with receipts.</em></h1><p>A mission-control intelligence layer for planning, enforcing, executing and observing autonomous operations.</p><div className="hero-actions"><a className="mission-button primary" href="#lifecycle">Enter mission control <ArrowRight size={15} /></a><a className="mission-button text" href="#studios">Explore DERYK <ArrowDownRight size={15} /></a></div><div className="hero-footnote"><span>SIMULATED DEMO ENVIRONMENT</span><span>NO LIVE HARDWARE CONNECTED</span></div></div></section>
 
       <section className="mission-claim"><span>THE INVARIANT</span><h2>The AI proposes.<br /><em>The Gate decides.</em></h2><p>DERYK keeps intelligence expressive and execution accountable by placing deterministic authority between the request and the vehicle.</p></section>
 
