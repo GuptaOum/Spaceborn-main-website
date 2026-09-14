@@ -18,3 +18,7 @@
 
 /* Keep the flight instrumentation secondary to the environment on wide screens. */
 @media(min-width:1051px){.mission-hero{grid-template-columns:1fr}.mission-hero .hero-editorial{max-width:760px}}
+
+.mc-logo{width:132px;height:34px;display:block;object-fit:cover;object-position:center}
+.studio-node.core .mc-logo{width:74px;height:20px;margin-bottom:6px}
+.mission-footer .mc-logo{width:132px;height:34px}

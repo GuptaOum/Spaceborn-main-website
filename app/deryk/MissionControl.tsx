@@ -21,7 +21,7 @@ const faqs = [
   ['How is telemetry stored?', 'Completed flights are exported to a shared analytics logbook, tagged by source so autonomous runs remain queryable and comparable with manual flights.'],
 ];
 
-function Mark() { return <span className="mc-mark" aria-hidden="true"><i /><i /><i /></span>; }
+function Mark() { return <img className="mc-logo" src="/images/deryk-logo.jpeg" alt="DERYK" />; }
 
 function AirspaceMap({ compact = false }: { compact?: boolean }) {
   return <div className={`airspace-map ${compact ? 'compact' : ''}`}>
