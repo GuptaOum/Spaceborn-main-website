@@ -21,7 +21,7 @@ const faqs = [
   ['How is telemetry stored?', 'Completed flights are exported to a shared analytics logbook, tagged by source so autonomous runs remain queryable and comparable with manual flights.'],
 ];
 
-function Mark() { return <span className="mc-mark" aria-hidden="true"><i /><i /><i /></span>; }
+function Mark() { return <img className="mc-logo" src="/images/deryk-logo.jpeg" alt="DERYK" />; }
 
 function AirspaceMap({ compact = false }: { compact?: boolean }) {
   return <div className={`airspace-map ${compact ? 'compact' : ''}`}>
@@ -64,7 +64,7 @@ function DerykPage() {
   const matrix = useMemo(() => Array.from({ length: 66 }, (_, index) => index), []);
 
   return <div className="mission-control" id="top">
-    <header className="mission-nav"><a href="#top" aria-label="DERYK home"><Mark /><span>DERYK</span></a><span className="mission-nav-status"><i /> SYSTEM / DERYK-01</span><nav><a href="#lifecycle">Lifecycle</a><a href="#studios">Studios</a><a href="#safety">Safety</a><a href="#logbook">Logbook</a><a className="mission-nav-button" href="#connect">Enter mission control <ArrowRight size={13} /></a></nav></header>
+    <header className="mission-nav"><a href="#top" aria-label="DERYK home"><Mark /></a><span className="mission-nav-status"><i /> SYSTEM / DERYK-01</span><nav><a href="#lifecycle">Lifecycle</a><a href="#studios">Studios</a><a href="#safety">Safety</a><a href="#logbook">Logbook</a><a className="mission-nav-button" href="#connect">Enter mission control <ArrowRight size={13} /></a></nav></header>
 
     <main>
       <section className="mission-hero"><div className="hero-editorial"><span className="eyebrow">DERYK / AUTONOMOUS MISSION SYSTEM</span><h1>Autonomy,<br /><em>with receipts.</em></h1><p>A mission-control intelligence layer for planning, enforcing, executing and observing autonomous operations.</p><div className="hero-actions"><a className="mission-button primary" href="#lifecycle">Enter mission control <ArrowRight size={15} /></a><a className="mission-button text" href="#studios">Explore DERYK <ArrowDownRight size={15} /></a></div><div className="hero-footnote"><span>SIMULATED DEMO ENVIRONMENT</span><span>NO LIVE HARDWARE CONNECTED</span></div></div></section>
@@ -84,7 +84,7 @@ function DerykPage() {
       <section className="mission-faq"><div><span className="eyebrow">06 / QUESTIONS, ANSWERED</span><h2>Precision over<br />promises.</h2></div><div>{faqs.map(([question, answer], index) => <article className={openFaq === index ? 'open' : ''} key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}>{question}<ChevronDown size={16} /></button><p>{answer}</p></article>)}</div></section>
       <section className="mission-cta" id="connect"><span className="eyebrow">07 / START WITH PROOF</span><h2>Build autonomous systems<br /><em>you can prove safe.</em></h2><p>Bring your mission loop into focus. DERYK gives every proposal a boundary and every flight a record.</p><a className="mission-button primary" href="mailto:hello@deryk.ai">Enter mission control <ArrowRight size={15} /></a></section>
     </main>
-    <footer className="mission-footer"><div><Mark /><strong>DERYK</strong><span>MISSION CONTROL DOCK / BUILD 0.1.0</span></div><div><i className="live-dot" /> SYSTEM NOMINAL <span>© 2026 DERYK SYSTEMS</span></div></footer>
+    <footer className="mission-footer"><div><Mark /><span>MISSION CONTROL DOCK / BUILD 0.1.0</span></div><div><i className="live-dot" /> SYSTEM NOMINAL <span>© 2026 DERYK SYSTEMS</span></div></footer>
   </div>;
 }
 
