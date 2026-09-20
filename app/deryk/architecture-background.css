@@ -1,0 +1,11 @@
+.reference-architecture {
+  background-image: none !important;
+}
+
+.reference-architecture .stack-layout {
+  background-image: linear-gradient(90deg, rgba(247, 248, 244, .48), rgba(247, 248, 244, .2)), url('/images/deryk-architecture-background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(2px);
+}
