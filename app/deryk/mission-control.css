@@ -163,3 +163,47 @@
 @keyframes loop-globe-pulse{0%,100%{box-shadow:0 0 35px rgba(86,146,239,.2),0 0 0 rgba(134,182,255,0)}50%{box-shadow:0 0 55px rgba(86,146,239,.42),0 0 24px rgba(134,182,255,.14)}}
 @keyframes loop-signal-orbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(86px)}to{transform:translate(-50%,-50%) rotate(360deg) translateX(86px)}}
 @media(prefers-reduced-motion:reduce){.mission-control:not(.intelligence-page) .world-loop::before,.mission-control:not(.intelligence-page) .world-loop::after,.mission-control:not(.intelligence-page) .loop-globe,.mission-control:not(.intelligence-page) .loop-globe::before{animation:none}}
+
+/* Improve reading size across the current DERYK page without enlarging display headlines. */
+.mission-control:not(.intelligence-page) .mission-nav nav,
+.mission-control:not(.intelligence-page) .mission-nav-status,
+.mission-control:not(.intelligence-page) .eyebrow,
+.mission-control:not(.intelligence-page) .reference-kicker,
+.mission-control:not(.intelligence-page) .reference-heading > span:last-child { font-size: 11px; }
+.mission-control:not(.intelligence-page) .mission-button,
+.mission-control:not(.intelligence-page) .reference-link,
+.mission-control:not(.intelligence-page) .reference-button,
+.mission-control:not(.intelligence-page) .reference-text-link { font-size: 11px; }
+.mission-control:not(.intelligence-page) .mission-hero .hero-editorial > p,
+.mission-control:not(.intelligence-page) .reference-principles > p,
+.mission-control:not(.intelligence-page) .thesis-copy p,
+.mission-control:not(.intelligence-page) .reference-careers p { font-size: 16px; }
+.mission-control:not(.intelligence-page) .principle-tags span,
+.mission-control:not(.intelligence-page) .world-loop-label,
+.mission-control:not(.intelligence-page) .stack-worlds,
+.mission-control:not(.intelligence-page) .stack-result,
+.mission-control:not(.intelligence-page) .action-steps > div > span { font-size: 10px; }
+.mission-control:not(.intelligence-page) .world-loop-label small,
+.mission-control:not(.intelligence-page) .stack-worlds small,
+.mission-control:not(.intelligence-page) .area-card p,
+.mission-control:not(.intelligence-page) .action-steps p { font-size: 12px; }
+.mission-control:not(.intelligence-page) .stack-layers span,
+.mission-control:not(.intelligence-page) .stack-layers small { font-size: 12px; }
+.mission-control:not(.intelligence-page) .stack-layers b { font-size: 16px; }
+.mission-control:not(.intelligence-page) .area-card h3,
+.mission-control:not(.intelligence-page) .action-steps h3 { font-size: 19px; }
+.mission-control:not(.intelligence-page) .mission-footer { font-size: 10px; }
+
+@media(max-width:680px) {
+	.mission-control:not(.intelligence-page) .mission-nav nav,
+	.mission-control:not(.intelligence-page) .mission-nav-status,
+	.mission-control:not(.intelligence-page) .eyebrow,
+	.mission-control:not(.intelligence-page) .reference-kicker { font-size: 10px; }
+	.mission-control:not(.intelligence-page) .mission-hero .hero-editorial > p,
+	.mission-control:not(.intelligence-page) .reference-principles > p,
+	.mission-control:not(.intelligence-page) .thesis-copy p,
+	.mission-control:not(.intelligence-page) .reference-careers p { font-size: 15px; }
+	.mission-control:not(.intelligence-page) .stack-layers b { font-size: 14px; }
+	.mission-control:not(.intelligence-page) .stack-layers span,
+	.mission-control:not(.intelligence-page) .stack-layers small { font-size: 10px; }
+}
