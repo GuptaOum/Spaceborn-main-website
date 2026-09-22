@@ -8,6 +8,7 @@ export const metadata = {
 export default function CertanityPage() {
   return (
     <CompanyPageLayout
+    themeClass="greeny"
       title="CERTANITY"
       subtitle="Develop. Simulate. Validate. Deploy."
       paragraphs={[

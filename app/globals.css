@@ -2774,3 +2774,14 @@ a {
   color: white;
 }
 
+
+.company-hero.greeny {
+  position: relative;
+  isolation: isolate;
+  /* dark green matching the navbar, fading to black */
+  
+  background: linear-gradient(180deg, #0f2a1c 0%, #010101 60%);
+
+}
+
+

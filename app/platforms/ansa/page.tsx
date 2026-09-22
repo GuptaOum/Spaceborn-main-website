@@ -8,6 +8,7 @@ export const metadata = {
 export default function AnsaPage() {
   return (
     <CompanyPageLayout
+      
       title="ANSA"
       subtitle="The Autonomy Platform for Intelligent Machines"
       paragraphs={[

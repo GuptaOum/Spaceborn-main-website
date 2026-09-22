@@ -8,6 +8,7 @@ export const metadata = {
 export default function FleetManagerPage() {
   return (
     <CompanyPageLayout
+    
       title="FLEET MANAGER"
       subtitle="Operate Every Machine From One Platform."
       paragraphs={[
