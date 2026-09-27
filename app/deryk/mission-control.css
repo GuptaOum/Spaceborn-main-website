@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 @import './careers-image.css';
 @import './hero-image.css';
 @import './earth-background.css';
@@ -213,6 +213,107 @@
 	.mission-control:not(.intelligence-page) .stack-layers small { font-size: 10px; }
 }
 
+.mission-control {
+	font-family: 'Manrope', sans-serif;
+}
+
+.mission-control h1,
+.mission-control h2,
+.mission-control h3,
+.mission-control h4,
+.mission-control p,
+.mission-control a,
+.mission-control button,
+.mission-control input,
+.mission-control textarea,
+.mission-control select {
+	font-family: 'Manrope', sans-serif;
+}
+
+.mission-control h1,
+.mission-control h2,
+.mission-control h3,
+.mission-control h4 {
+	font-weight: 700;
+	letter-spacing: -0.045em;
+}
+
+.mission-control p {
+	font-weight: 500;
+	letter-spacing: -0.01em;
+}
+
+.mission-control .eyebrow,
+.mission-control .mission-nav nav,
+.mission-control .mission-nav-status,
+.mission-control .hero-footnote,
+.mission-control .map-readout,
+.mission-control .map-label,
+.mission-control .stage-heading span,
+.mission-control .mission-contract,
+.mission-control .chamber-readout,
+.mission-control .studio-node,
+.mission-control .safety-step,
+.mission-control .matrix-system,
+.mission-control .logbook,
+.mission-control .mission-footer,
+.mission-control .reference-kicker,
+.mission-control .principle-tags,
+.mission-control .reference-link,
+.mission-control .reference-button,
+.mission-control .reference-text-link,
+.mission-control .world-loop-label,
+.mission-control .stack-worlds,
+.mission-control .stack-result,
+.mission-control .action-steps > div > span {
+	font-family: 'IBM Plex Mono', monospace;
+}
+
+.mission-control .hero-editorial h1,
+.mission-control .intelligence-hero h1 {
+	font-weight: 700;
+	letter-spacing: -0.075em;
+}
+
+.mission-control .section-intro h2,
+.mission-control .mission-claim h2,
+.mission-control .mission-cta h2,
+.mission-control .reference-principles h2,
+.mission-control .reference-thesis h2,
+.mission-control .reference-heading h2,
+.mission-control .reference-careers h2 {
+	font-weight: 700;
+	letter-spacing: -0.06em;
+}
+
+.mission-control .mission-button,
+.mission-control .mission-nav-button,
+.mission-control .area-card h3,
+.mission-control .action-steps h3,
+.mission-control .world-card h3,
+.mission-control .product-area h3 {
+	font-family: 'Manrope', sans-serif;
+	font-weight: 700;
+	letter-spacing: -0.025em;
+}
+
+.mission-control:not(.intelligence-page) .mission-hero .hero-editorial h1,
+.mission-control:not(.intelligence-page) .mission-hero .hero-editorial > p {
+	font-family: 'Archivo', sans-serif;
+}
+
+.mission-control:not(.intelligence-page) .mission-hero .hero-editorial > p {
+	font-weight: 500;
+	letter-spacing: -0.02em;
+}
+
+@media (max-width: 680px) {
+	.mission-control .mission-nav nav,
+	.mission-control .mission-nav-status {
+		display: none;
+	}
+}
+
 .action-art-0 { background-image: url('/images/deryk-sense.jpeg') !important; background-size: cover !important; background-position: center !important; }
 .action-art-1 { background-image: url('/images/deryk-understand.jpeg') !important; background-size: cover !important; background-position: center !important; }
 .action-art-2 { background-image: url('/images/deryk-predict.jpeg') !important; background-size: cover !important; background-position: center !important; }
@@ -263,4 +364,10 @@
 		height: 70px;
 		padding-inline: 20px;
 	}
+}
+
+@media (max-width: 680px) {
+  .mission-control:not(.intelligence-page) .mission-nav nav {
+    display: none;
+  }
 }
