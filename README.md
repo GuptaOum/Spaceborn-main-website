@@ -4,7 +4,7 @@
 
 This repository contains the official frontend website for **Spaceborn**, showcasing their simulation-first autonomous flight intelligence platforms and systems.
 
-Built using a modern web stack featuring **Next.js**, **React**, **TypeScript**, and **Vanilla CSS** for precise layout and fluid, interactive styling.
+Built using a modern web stack featuring **Next.js**, **React**, **TypeScript**, and **Vanilla CSS** for precise layout and fluid, interactive styling and showcase our products
 
 ---
 
