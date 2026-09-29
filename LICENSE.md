@@ -39,3 +39,4 @@ Enforcement
 Spaceborn reserves all rights to enforce this license and protect its intellectual property.
 
 By accessing this repository, you agree to comply with this license.
+All right reserved to Spaceborn
