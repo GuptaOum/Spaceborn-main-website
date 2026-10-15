@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getCertificate, type CertificateRecord } from '../../../backend/certificateService';
+import { getBackendCer, type BackendCerRecord } from '../../../backend/backendCerService';
 
 export const metadata: Metadata = {
   title: 'Certificate Verification | Spaceborn',
@@ -49,7 +49,7 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ValidCertificate({ certificate }: { certificate: CertificateRecord }) {
+function ValidCertificate({ certificate }: { certificate: BackendCerRecord }) {
   const tenure =
     certificate.start_date && certificate.end_date
       ? `${certificate.start_date} — ${certificate.end_date}`
@@ -128,7 +128,7 @@ function NotFound({ id }: { id: string }) {
 
 export default async function VerifyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const certificate = CERT_ID_PATTERN.test(id) ? await getCertificate(id) : null;
+  const certificate = CERT_ID_PATTERN.test(id) ? await getBackendCer(id) : null;
 
   return (
     <main style={pageStyle}>

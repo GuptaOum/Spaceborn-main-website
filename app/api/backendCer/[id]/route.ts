@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCertificate } from '../../../../backend/certificateService';
+import { getBackendCer } from '../../../../backend/backendCerService';
 import { isRateLimited } from '../../../../lib/rateLimit';
 
 export const runtime = 'nodejs';
@@ -11,7 +11,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const rateLimitResult = isRateLimited(request, 'certificates-lookup', {
+    const rateLimitResult = isRateLimited(request, 'backendCer-lookup', {
       limit: 60,
       windowMs: 60 * 1000,
     });
@@ -33,7 +33,7 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid certificate ID format.' }, { status: 400 });
     }
 
-    const certificate = await getCertificate(id);
+    const certificate = await getBackendCer(id);
     if (!certificate) {
       return NextResponse.json({ error: 'Certificate not found.' }, { status: 404 });
     }

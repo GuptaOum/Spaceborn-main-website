@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { upsertCertificates } from '../../../backend/certificateService';
+import { upsertBackendCer } from '../../../backend/backendCerService';
 import { isRateLimited } from '../../../lib/rateLimit';
 import { isValidLength, hasNewline } from '../../../lib/validation';
 
@@ -57,7 +57,7 @@ function validateCertificate(entry: any, index: number): { record?: IncomingCert
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimitResult = isRateLimited(request, 'certificates-sync', {
+    const rateLimitResult = isRateLimited(request, 'backendCer-sync', {
       limit: 20,
       windowMs: 15 * 60 * 1000,
     });
@@ -100,16 +100,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Accept either a single certificate object or { certificates: [...] }
-    const entries: any[] = Array.isArray(body?.certificates)
-      ? body.certificates
-      : body?.certificate_id
-        ? [body]
-        : [];
+    // Accept either a single certificate object or { backendCer: [...] } or { certificates: [...] }
+    const entries: any[] = Array.isArray(body?.backendCer)
+      ? body.backendCer
+      : Array.isArray(body?.certificates)
+        ? body.certificates
+        : body?.certificate_id
+          ? [body]
+          : [];
 
     if (entries.length === 0) {
       return NextResponse.json(
-        { error: 'No certificates provided. Send { certificates: [...] } or a single certificate object.' },
+        { error: 'No certificates provided. Send { backendCer: [...] } or a single certificate object.' },
         { status: 400 }
       );
     }
@@ -130,7 +132,7 @@ export async function POST(request: NextRequest) {
       records.push(record!);
     }
 
-    const result = await upsertCertificates(records);
+    const result = await upsertBackendCer(records);
 
     return NextResponse.json({
       success: true,

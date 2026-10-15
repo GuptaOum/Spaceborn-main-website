@@ -1,6 +1,6 @@
 import { getPool } from '../lib/db';
 
-export type CertificateRecord = {
+export type BackendCerRecord = {
   certificate_id: string;
   name: string;
   designation: string;
@@ -13,16 +13,20 @@ export type CertificateRecord = {
   updated_at: string;
 };
 
-export async function getCertificate(certificateId: string): Promise<CertificateRecord | null> {
-  const { rows } = await getPool().query<CertificateRecord>(
+export type CertificateRecord = BackendCerRecord;
+
+export async function getBackendCer(certificateId: string): Promise<BackendCerRecord | null> {
+  const { rows } = await getPool().query<BackendCerRecord>(
     'SELECT * FROM certificates WHERE certificate_id = $1',
     [certificateId]
   );
   return rows[0] ?? null;
 }
 
-export async function upsertCertificates(
-  records: Omit<CertificateRecord, 'updated_at'>[]
+export const getCertificate = getBackendCer;
+
+export async function upsertBackendCer(
+  records: Omit<BackendCerRecord, 'updated_at'>[]
 ): Promise<{ upserted: number; total: number }> {
   const client = await getPool().connect();
   try {
@@ -83,3 +87,5 @@ export async function upsertCertificates(
     client.release();
   }
 }
+
+export const upsertCertificates = upsertBackendCer;
