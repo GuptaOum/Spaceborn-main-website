@@ -48,9 +48,14 @@ scripts/make_seal.py
 scripts/make_sample_sheet.py
 scripts/certificates_data.xlsx
 scripts/certificate-requirements.txt
+certificate-requirements.txt
+certificate requirement.txt
+scripts/certificate requirement.txt
 # generated certificates and their data log (personal data, keep local)
 scripts/output/
 scripts/certificates_log.csv
+Oum Gupta/
+Oum_Gupta/
 
 # Candidate resumes / applicant PII — never commit
 spaceborn-resumes/
@@ -61,3 +66,8 @@ resumes/
 # Python build artifacts
 __pycache__/
 *.py[cod]
+
+# Local editor & scratch workshop files
+.claude/
+google_adk_workshop/
+scratch_agent.py

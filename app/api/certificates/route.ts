@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const configuredKey = process.env.CERT_API_KEY;
+    const configuredKey = process.env.CERT_API_KEY || process.env.SPACEBORN_API_KEY;
     if (!configuredKey) {
       return NextResponse.json(
         { error: 'Certificate API is not configured on this server.' },
@@ -82,7 +82,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const providedKey = request.headers.get('x-api-key') || '';
+    const providedKey =
+      request.headers.get('x-api-key') ||
+      request.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim() ||
+      '';
     if (providedKey !== configuredKey) {
       return NextResponse.json({ error: 'Invalid or missing API key.' }, { status: 401 });
     }

@@ -376,11 +376,11 @@ export default function MissionReplay() {
     return () => {
       cancelAnimationFrame(animationFrame);
       observer.disconnect();
-      scene.traverse((object) => {
+      scene.traverse((object: any) => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Line) {
           object.geometry.dispose();
           const materials = Array.isArray(object.material) ? object.material : [object.material];
-          materials.forEach((material) => material.dispose());
+          materials.forEach((material: any) => material.dispose());
         }
       });
       renderer.dispose();
