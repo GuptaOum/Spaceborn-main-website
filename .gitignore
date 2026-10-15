@@ -42,6 +42,10 @@ next-env.d.ts
 # uploads (PII)
 /uploads/
 
+# Local media assets (keep local, do not push to git)
+downloaded_assets/
+/downloaded_assets/
+
 # internal certificate generator 
 scripts/generate_certificates.py
 scripts/make_seal.py
