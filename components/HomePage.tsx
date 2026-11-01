@@ -1,690 +1,707 @@
 'use client';
 import { LazyVideo } from "./LazyVideo";
-import { optimizeCloudinary } from "../lib/utils";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type KeyboardEvent, type ReactNode, type RefObject } from 'react';
+import Link from 'next/link';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import ResumeModal from './ResumeModal';
 import Footer from './Footer';
 import Navbar from './Navbar';
+import styles from './HomePage.module.css';
 
+const SPRING = { type: 'spring', stiffness: 100, damping: 20 } as const;
+const PRESS = { scale: 0.97 };
+const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const;
 
+const CLD = 'https://res.cloudinary.com/kpa1wv3h';
+const cldVideo = (path: string, width: number) =>
+  `${CLD}/video/upload/f_auto,q_auto:good,w_${width},c_limit/${path}.mp4`;
+const cldPoster = (path: string, width: number) =>
+  `${CLD}/video/upload/so_1,f_auto,q_auto,w_${width},c_limit/${path}.jpg`;
+const MEDIA = '/media/home';
 
-type SimulatorData = {
+type Tile = {
   id: string;
-  num: string;
-  title: string;
+  name: string;
+  tag?: string;
   desc: string;
-  cta: string;
-  image?: string;
-  imageMobile?: string;
+  href: string;
+  size: 'square' | 'wide' | 'tall';
+  image: string;
+  alt: string;
   video?: string;
+  fit?: 'cover' | 'contain';
+  position?: string;
 };
 
-const simulators: SimulatorData[] = [
+const TILES: Tile[] = [
   {
-    id: 'sitl-kernel',
-    num: 'SIM 01',
-    title: 'ANSA-SITL KERNEL SIMULATOR',
-    desc: 'The digital heartbeat of ANSA. Every decision, every control loop, and every autonomous action begins here before reaching the real world.',
-    cta: 'ENTER THE CORE',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382885/spaceborn_assets/sitl_kernel_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image6.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382817/spaceborn_assets/ansa-sitl-kernel-gif.mp4'),
+    id: 'flight-controller',
+    name: 'Flight Controller',
+    tag: '01 AUTONOMY SILICON',
+    desc: 'ELARA boards from STM32F7 to STM32H7, running the ANSA autonomy stack through one HAL.',
+    href: '/systems/flight-cont',
+    size: 'wide',
+    image: cldPoster('v1785868057/VideoProject_hzk4kg', 1600),
+    video: cldVideo('v1785868057/VideoProject_hzk4kg', 1600),
+    alt: 'ELARA flight controller mounted on a drone frame',
   },
   {
-    id: 'digital-twin',
-    num: 'SIM 02',
-    title: 'ANSA DIGITAL TWIN SIMULATOR',
-    desc: 'Build it once. Fly it a thousand times. A living digital replica where systems are tested, broken, and perfected before a single component is manufactured.',
-    cta: 'EXPLORE THE DIGITAL TWIN',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382814/spaceborn_assets/ansa-digital-twin.jpg',
-    imageMobile: '/images/mobile-ui/image7.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382838/spaceborn_assets/digital-twin-gif.mp4'),
+    id: 'elara',
+    name: 'ELARA SB2',
+    tag: '02 HIGH-PERFORMANCE H7',
+    desc: 'High-performance STM32H7 flight controller.',
+    href: '/systems/flight-cont',
+    size: 'tall',
+    image: `${MEDIA}/elara-sb2.webp`,
+    video: `${MEDIA}/elara-sb2.mp4`,
+    alt: 'ELARA SB2 flight controller on a dark surface',
   },
   {
-    id: 'fault-failure',
-    num: 'SIM 03',
-    title: 'FAULT & FAILURE SCENARIO SIMULATOR',
-    desc: "Failure isn't avoided. It's engineered for. Push autonomous systems through catastrophic scenarios and prove they can survive when everything goes wrong.",
-    cta: 'TEST THE LIMITS',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382846/spaceborn_assets/fault_failure_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image8.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382847/spaceborn_assets/fault_failure_simulator_img.mp4'),
+    id: 'aria',
+    name: 'ARIA 50A',
+    tag: '03 MOTOR ARCHITECTURE',
+    desc: 'AM32 electronic speed controller with live current telemetry.',
+    href: '/systems/Esc-sys',
+    size: 'square',
+    image: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
+    alt: 'ARIA 50A electronic speed controller PCB',
+    fit: 'contain',
   },
   {
-    id: 'gps-denied',
-    num: 'SIM 04',
-    title: 'GPS-DENIED NAVIGATION SIMULATOR',
-    desc: 'When satellites disappear, autonomy takes over. Train intelligent systems to navigate confidently through urban canyons, tunnels, and contested environments.',
-    cta: 'ENTER DENIED TERRITORY',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382852/spaceborn_assets/gps_denied_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image9.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1785966759/tunnelDrone_nhqulg.mp4'),
+    id: 'hpu',
+    name: 'HPU',
+    tag: '04 EDGE SENSOR FUSION',
+    desc: 'Multi-sensor AI edge compute for camera, LiDAR, radar, and GNSS.',
+    href: '/systems/edgecompute',
+    size: 'square',
+    image: `${MEDIA}/hpu.webp`,
+    alt: 'HPU edge compute board, 3D render',
+    fit: 'contain',
   },
   {
-    id: 'swarm-fleet',
-    num: 'SIM 05',
-    title: 'SWARM & FLEET SIMULATOR',
-    desc: 'One vehicle is impressive. One hundred moving as a single intelligence changes everything. Validate coordinated autonomy at fleet scale.',
-    cta: 'COMMAND THE SWARM',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382895/spaceborn_assets/swarm_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image10.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1786023546/swarmFleet_x4tlds.mp4'),
+    id: 'deryk',
+    name: 'DERYK',
+    tag: '05 MISSION COGNITION',
+    desc: 'Turns operator intent into executable machine action.',
+    href: 'https://spaceborn-web.vercel.app/',
+    size: 'wide',
+    image: cldPoster('v1785966524/womanAndDrone_xjbmqm', 1200),
+    video: cldVideo('v1785966524/womanAndDrone_xjbmqm', 1200),
+    alt: 'Operator collaborating with autonomous drone platform in the field',
   },
   {
-    id: 'lidar-depth',
-    num: 'SIM 06',
-    title: 'LiDAR & DEPTH PERCEPTION SIMULATOR',
-    desc: 'Teach machines to see the world in three dimensions. Generate massive volumes of spatial intelligence for mapping, navigation, and next-generation perception systems.',
-    cta: 'EXPLORE MACHINE PERCEPTION',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382861/spaceborn_assets/lidar-sim-new.jpg',
-    imageMobile: '/images/mobile-ui/image11.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1785969537/wetTuneel_tqmtoh.mp4'),
+    id: 'certanity',
+    name: 'CERTANITY',
+    tag: '06 SIMULATION RUNTIME',
+    desc: '24+ domain simulators. Every control loop is broken here before it flies.',
+    href: '/platforms/certainty',
+    size: 'square',
+    image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
+    video: cldVideo('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
+    alt: 'Quadcopter holding position inside a concrete tunnel',
+    position: '68% 50%',
   },
   {
-    id: 'khonsu-space',
-    num: 'SIM 07',
-    title: 'KHONSU SPACE SIMULATOR',
-    desc: 'Built for the environments where human control becomes impossible. Validate autonomous systems across orbital operations, lunar missions, and the future of deep-space exploration.',
-    cta: 'EXPLORE BEYOND EARTH',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382860/spaceborn_assets/khonshu-space-simulator-img.jpg',
-    imageMobile: '/images/mobile-ui/image12.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382858/spaceborn_assets/khonshu-space-simulator-gif.mp4'),
+    id: 'elio',
+    name: 'SB ELIO',
+    tag: '07 DUAL-MCU DEV BOARD',
+    desc: 'Dual-MCU development board. ESP32-S3 and RP2350 on one platform.',
+    href: '/systems/embedded-sdk',
+    size: 'square',
+    image: `${MEDIA}/sb-elio.webp`,
+    alt: 'SB ELIO development board',
+    fit: 'contain',
   },
   {
-    id: 'telemetry-anomaly',
-    num: 'SIM 08',
-    title: 'TELEMETRY ANOMALY SIMULATOR',
-    desc: 'The difference between a mission and a failure is knowing what happens next. Train AI systems to identify anomalies before they become critical events.',
-    cta: 'PREDICT THE UNEXPECTED',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382896/spaceborn_assets/telemetry_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image13.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1785958981/0805_kw7l0x.mp4'),
-  },
-  {
-    id: 'hal-portability',
-    num: 'SIM 09',
-    title: 'HAL PORTABILITY EMULATOR',
-    desc: 'One intelligence. Infinite hardware. Certify autonomous systems across platforms without rewriting the software that powers them.',
-    cta: 'VALIDATE COMPATIBILITY',
-    image: 'https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382853/spaceborn_assets/hal_portability_simulator_img.jpg',
-    imageMobile: '/images/mobile-ui/image14.webp',
-    video: optimizeCloudinary('https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382855/spaceborn_assets/hal_portability_simulator_img.mp4'),
+    id: 'gcs',
+    name: 'GROUND CONTROL',
+    tag: '08 50 HZ DIGITAL TWIN',
+    desc: 'Live attitude and telemetry from the airframe, mirrored on a 3D digital twin at 50 Hz.',
+    href: '/platforms/missionstudio',
+    size: 'wide',
+    image: `${MEDIA}/gcs-twin.webp`,
+    video: `${MEDIA}/gcs-twin.mp4`,
+    alt: 'ANSA digital twin cockpit mirroring a hand-tilted IMU board on the attitude indicator and 3D drone model',
   },
 ];
-type TypewriterHeadingProps = {
-  lines: string[];
-  as?: 'h1' | 'h2' | 'h3';
-  className?: string;
-  style?: React.CSSProperties;
-  charSpeed?: number;
-  lineDelay?: number;
+
+type Board = {
+  id: string;
+  tab: string;
+  name: string;
+  kind: string;
+  desc: string;
+  specs: [string, string][];
+  href: string;
+  image: { src: string; alt: string; width: number; height: number; fit?: 'cover' | 'contain' };
 };
 
-function TypewriterHeading({
-  lines,
-  as = 'h2',
-  className = '',
-  style,
-  charSpeed = 45,
-  lineDelay = 150,
-}: TypewriterHeadingProps) {
-  const [typedLines, setTypedLines] = useState<string[]>(lines.map(() => ''));
-  const [hasStarted, setHasStarted] = useState(false);
-  const elRef = useRef<HTMLDivElement>(null);
+const BOARDS: Board[] = [
+  {
+    id: 'sb0',
+    tab: 'ELARA SB0',
+    name: 'ELARA SB0',
+    kind: 'Flight controller',
+    desc: '4-layer STM32F7 flight controller for advanced autonomous drones and research platforms.',
+    specs: [
+      ['MCU family', 'STM32F7'],
+      ['PCB stack-up', '4-LAYER'],
+      ['Autonomy stack', 'ANSA VIA HAL'],
+    ],
+    href: '/systems/flight-cont',
+    image: { src: `${MEDIA}/elara-sb0-wide.webp`, alt: 'ELARA SB0 flight controller, top view', width: 1280, height: 960 },
+  },
+  {
+    id: 'sb1',
+    tab: 'ELARA SB1',
+    name: 'ELARA SB1',
+    kind: 'Flight controller',
+    desc: '6-layer STM32F7 flight controller. Two additional copper layers over SB0 for power and signal routing.',
+    specs: [
+      ['MCU family', 'STM32F7'],
+      ['PCB stack-up', '6-LAYER'],
+      ['Autonomy stack', 'ANSA VIA HAL'],
+    ],
+    href: '/systems/flight-cont',
+    image: { src: `${MEDIA}/elara-sb1.webp`, alt: 'ELARA SB1 flight controller wired on the bench', width: 1190, height: 896 },
+  },
+  {
+    id: 'sb2',
+    tab: 'ELARA SB2',
+    name: 'ELARA SB2',
+    kind: 'Flight controller',
+    desc: 'High-performance STM32H7 controller with increased processing headroom, expanded connectivity, and support for complex AI workloads.',
+    specs: [
+      ['MCU family', 'STM32H7'],
+      ['Class', 'HIGH-PERFORMANCE'],
+      ['Autonomy stack', 'ANSA VIA HAL'],
+    ],
+    href: '/systems/flight-cont',
+    image: { src: `${MEDIA}/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
+  },
+  {
+    id: 'aria',
+    tab: 'ARIA 50A',
+    name: 'ARIA 50A',
+    kind: 'Electronic speed controller',
+    desc: 'Electronic speed controller with live current telemetry streamed back to the flight controller.',
+    specs: [
+      ['Continuous current', '50 A'],
+      ['Firmware', 'AM32'],
+      ['Input voltage', '3S – 6S LIPO'],
+      ['Telemetry', 'LIVE CURRENT'],
+      ['Board dimensions', '37 × 42.5 MM'],
+    ],
+    href: '/systems/Esc-sys',
+    image: {
+      src: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
+      alt: 'ARIA 50A electronic speed controller PCB',
+      width: 900,
+      height: 900,
+      fit: 'contain',
+    },
+  },
+];
 
+type Scenario = {
+  id: string;
+  title: string;
+  desc: string;
+  readouts: [string, string][];
+  video: { src: string; poster: string; fit?: 'cover' | 'contain' };
+};
+
+const SCENARIOS: Scenario[] = [
+  {
+    id: 'tunnel-drone',
+    title: 'GPS-denied tunnel navigation',
+    desc: 'When satellites disappear, autonomy takes over. Optical flow and LiDAR point clouds hold trajectory through unmapped subterranean corridors.',
+    readouts: [['GNSS', 'DENIED'], ['HOLD', 'OPTICAL FLOW'], ['TRAJECTORY', 'LOCKED']],
+    video: {
+      src: cldVideo('v1785966759/tunnelDrone_nhqulg', 1600),
+      poster: cldPoster('v1785966759/tunnelDrone_nhqulg', 1600),
+    },
+  },
+  {
+    id: 'drone-swarm',
+    title: '128-unit swarm coordination',
+    desc: 'Distributed consensus and decentralized collision avoidance. Autonomous agents negotiate airspace and execute synchronized group missions.',
+    readouts: [['AGENTS', '128'], ['CONSENSUS', 'SYNCED'], ['LINK', 'MESH 5.8GHZ']],
+    video: {
+      src: cldVideo('v1786023546/swarmFleet_x4tlds', 1600),
+      poster: cldPoster('v1786023546/swarmFleet_x4tlds', 1600),
+    },
+  },
+  {
+    id: 'factory',
+    title: 'Industrial inspection cell',
+    desc: 'Four robot stations, a conveyor, and an inspection line in a simulated factory, proven before any arm moves on the floor.',
+    readouts: [['STATIONS', '4'], ['LINE', 'INSPECTION'], ['DOMAIN', 'INDUSTRIAL']],
+    video: { src: `${MEDIA}/sim-factory.mp4`, poster: `${MEDIA}/sim-factory.webp` },
+  },
+];
+
+const CYCLE_MS = 9000;
+
+function useInView(ref: RefObject<Element | null>, threshold = 0.15) {
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    const el = elRef.current;
+    const el = ref.current;
     if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasStarted) {
-            setHasStarted(true);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [hasStarted]);
+  }, [ref, threshold]);
+  return inView;
+}
 
+function usePlayWhen(videoRef: RefObject<HTMLVideoElement | null>, shouldPlay: boolean, key?: unknown) {
   useEffect(() => {
-    if (!hasStarted) return;
-
-    let stage = 0;
-    let charIndex = 0;
-    let timeoutId: ReturnType<typeof setTimeout>;
-
-    const typeNext = () => {
-      if (stage >= lines.length) return;
-
-      const currentLine = lines[stage];
-
-      if (charIndex <= currentLine.length) {
-        const sliced = currentLine.slice(0, charIndex);
-        setTypedLines((prev) => {
-          const updated = [...prev];
-          updated[stage] = sliced;
-          return updated;
-        });
-        charIndex++;
-        timeoutId = setTimeout(typeNext, charSpeed);
-      } else {
-        stage++;
-        charIndex = 0;
-        timeoutId = setTimeout(typeNext, lineDelay);
-      }
+    const video = videoRef.current;
+    if (!video) return;
+    if (!shouldPlay) {
+      video.pause();
+      return;
+    }
+    const play = () => {
+      video.play().catch(() => {});
     };
+    play();
+    video.addEventListener('loadeddata', play);
+    return () => video.removeEventListener('loadeddata', play);
+  }, [videoRef, shouldPlay, key]);
+}
 
-      if (typeof document !== 'undefined' && document.fonts?.load) {
-    document.fonts.load('1em Ethnocentric').finally(() => {
-      timeoutId = setTimeout(typeNext, 200);
-    });
-  } else {
-    timeoutId = setTimeout(typeNext, 200);
-  }
-  return () => clearTimeout(timeoutId);
-  }, [hasStarted, lines, charSpeed, lineDelay]);
-
-  const Tag = as;
-
+function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   return (
-    <div ref={elRef}>
-      <Tag className={className} style={style}>
-        {typedLines.map((line, i) => (
-          <span key={i}>
-            {line}
-            {i < typedLines.length - 1 && <br />}
-          </span>
-        ))}
-      </Tag>
-    </div>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ ...SPRING, delay }}
+    >
+      {children}
+    </motion.div>
   );
 }
-export default function HomePage() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isHeroMuted, setIsHeroMuted] = useState(true);
-  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('releases');
-  
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const systemsVideoRef = useRef<HTMLVideoElement>(null);
-  const simVideoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
+function SectionHead({ eyebrow, title, lede }: { eyebrow?: string; title: string; lede: string }) {
+  return (
+    <Reveal className={styles.sectionHead}>
+      <div className={styles.sectionTitleBlock}>
+        {eyebrow && <span className={styles.sectionEyebrow}>{eyebrow}</span>}
+        <h2 className={styles.sectionTitle}>{title}</h2>
+      </div>
+      <p className={styles.sectionLede}>{lede}</p>
+    </Reveal>
+  );
+}
 
-  const handleToggleSound = () => {
-    setIsHeroMuted((prev) => !prev);
+function ArrowIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M4 12L12 4M12 4H5.5M12 4V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+/* ───────────── 1. Hero ───────────── */
+
+function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const inView = useInView(sectionRef, 0.05);
+  usePlayWhen(videoRef, inView);
+
+  return (
+    <section ref={sectionRef} className={styles.hero} id="releases">
+      <div className={styles.heroFrame}>
+        <video
+          ref={videoRef}
+          className={styles.heroVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={cldPoster('v1785962155/droneCircuitVid_p16yvl', 1920)}
+          aria-hidden="true"
+        >
+          <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 720)} type="video/mp4" media="(max-width: 720px)" />
+          <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 1920)} type="video/mp4" />
+        </video>
+        <div className={styles.heroVignette} />
+
+        <div className={`${styles.container} ${styles.heroContent}`}>
+          <h1 className={styles.heroTitle}>
+            AUTONOMY, FROM THE SILICON UP.
+          </h1>
+          <p className={styles.heroSub}>
+            Flight controllers, edge compute, and the ANSA autonomy OS that runs on them. Built, simulated, and
+            deployed as one stack.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────── 2. Product grid ───────────── */
+
+function ProductTile({ tile, index }: { tile: Tile; index: number }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const isGcs = tile.id === 'gcs';
+
+  const start = () => {
+    const video = videoRef.current;
+    if (!video || reduceMotion) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    video.play().catch(() => {});
+  };
+  const stop = () => {
+    videoRef.current?.pause();
+    setPlaying(false);
   };
 
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return;
+  const body = (
+    <>
+      <div className={styles.tileMedia}>
+        <img
+          className={tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage}
+          src={tile.image}
+          alt={tile.alt}
+          decoding="async"
+          style={tile.position ? { objectPosition: tile.position } : undefined}
+        />
+        {tile.video && (
+          <video
+            ref={videoRef}
+            className={`${styles.tileVideo} ${playing ? styles.tileVideoOn : ''}`}
+            style={tile.position ? { objectPosition: tile.position } : undefined}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            onPlaying={() => setPlaying(true)}
+          >
+            <source src={tile.video} type="video/mp4" />
+          </video>
+        )}
+      </div>
+      <div className={styles.tileScrim} />
+      <div className={styles.tileText}>
+        {tile.tag && <span className={styles.tileTag}>{tile.tag}</span>}
+        <h3 className={styles.tileTitle}>{tile.name}</h3>
+        <div className={styles.tileDescWrap}>
+          <p className={styles.tileDesc}>{tile.desc}</p>
+        </div>
+      </div>
+      <ArrowIcon className={styles.tileArrow} />
+    </>
+  );
 
-    // Start muted to ensure autoplay is allowed on all browsers
-    video.muted = true;
-    setIsHeroMuted(true);
+  const handlers = { onPointerEnter: start, onPointerLeave: stop, onFocus: start, onBlur: stop };
+  const className = `${styles.tile} ${styles[tile.size]} ${isGcs ? styles.tileGcs : ''}`;
 
-    video.play().catch((error) => {
-      console.log("Muted autoplay blocked initially:", error);
-    });
-  }, []);
+  return (
+    <motion.div
+      className={`${styles.tileCell} ${styles[tile.size]}`}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="shown"
+      viewport={{ once: true, margin: '-80px' }}
+    >
+      <motion.div
+        className={styles.tileClip}
+        variants={{
+          hidden: { clipPath: 'inset(0% 0% 100% 0%)' },
+          shown: { clipPath: 'inset(0% 0% 0% 0%)' },
+        }}
+        transition={{ duration: 0.7, ease: EASE_IN_OUT, delay: (index % 3) * 0.06 }}
+      >
+        {tile.href.startsWith('http') ? (
+          <a href={tile.href} className={className} {...handlers}>
+            {body}
+          </a>
+        ) : (
+          <Link href={tile.href} className={className} {...handlers}>
+            {body}
+          </Link>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
 
-  useEffect(() => {
-  const video = heroVideoRef.current;
-  if (!video) return;
+function ProductGrid() {
+  return (
+    <section className={styles.section} id="platforms">
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="01 MODULAR SYSTEMS ARCHITECTURE"
+          title="ONE STACK FOR EVERY PHYSICAL MACHINE."
+          lede="ANSA runs the machine. DERYK decides what it should do. Certanity proves it in simulation before it moves. Spaceborn hardware carries it into the field, across air, ground, marine, and space."
+        />
+        <div className={styles.tiles}>
+          {TILES.map((tile, i) => (
+            <ProductTile key={tile.id} tile={tile} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-  video.muted = true;
-  setIsHeroMuted(true);
+/* ───────────── 3. Hardware lab ───────────── */
 
-  video.play().catch((error) => {
-    console.log("Muted autoplay blocked initially:", error);
-  });
-}, []);
+function HardwareLab() {
+  const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const board = BOARDS[active];
 
-
-  // Intersection Observer to track active section / simulator panel
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5, // 50% visibility
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    // Observe vertical pages
-    const verticalPages = ['releases', 'platforms', 'simulation', 'systems', 'thoth'];
-    verticalPages.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    // Observe individual simulator panels inside the horizontal scroll
-    simulators.forEach((sim) => {
-      const el = document.getElementById(`sim-${sim.id}`);
-      if (el) observer.observe(el);
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // Synchronize audio and video mute/play states based on active section and global mute state
-  useEffect(() => {
-    const isMuted = isHeroMuted;
-
-    // 1. Hero Page 1 (id="releases")
-    const heroVideo = heroVideoRef.current;
-    const heroAudio = audioRef.current;
-    const isHeroActive = activeSection === 'releases';
-    const heroMute = isMuted || !isHeroActive;
-
-    if (heroVideo) {
-      heroVideo.muted = heroMute;
-      if (!heroMute) {
-        heroVideo.play().catch((err) => console.log("Hero video play failed:", err));
-      }
-    }
-    if (heroAudio) {
-      heroAudio.muted = heroMute;
-      if (!heroMute) {
-        heroAudio.play().catch((err) => console.log("Hero audio play failed:", err));
-      } else {
-        heroAudio.pause();
-      }
-    }
-
-    // 2. Page 2 (id="platforms") - keep current behavior (always muted)
-    // This is handled by having muted={true} on the Page 2 video elements in JSX.
-
-    // 3. Page 4 Systems (id="systems")
-    const systemsVideo = systemsVideoRef.current;
-    const isSystemsActive = activeSection === 'systems';
-    const systemsMute = isMuted || !isSystemsActive;
-
-    if (systemsVideo) {
-      systemsVideo.muted = systemsMute;
-      if (!systemsMute) {
-        systemsVideo.play().catch((err) => console.log("Systems video play failed:", err));
-      }
-    }
-
-    // 4. Simulator panels
-    simulators.forEach((sim) => {
-      const simVideo = simVideoRefs.current[sim.id];
-      if (simVideo) {
-        const isSimActive = activeSection === `sim-${sim.id}`;
-        const simMute = isMuted || !isSimActive;
-        simVideo.muted = simMute;
-        if (!simMute) {
-          simVideo.play().catch((err) => console.log(`Sim ${sim.id} video play failed:`, err));
-        }
-      }
-    });
-  }, [activeSection, isHeroMuted]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const { scrollLeft, scrollWidth, clientWidth } = container;
-      const maxScroll = scrollWidth - clientWidth;
-      if (maxScroll > 0) {
-        setScrollProgress((scrollLeft / maxScroll) * 100);
-      }
-    };
-
-    container.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Subtle horizontal peek animation on mount to guide the user
-    const timer = setTimeout(() => {
-      container.scrollTo({ left: 80, behavior: 'smooth' });
-      const timerBack = setTimeout(() => {
-        container.scrollTo({ left: 0, behavior: 'smooth' });
-      }, 700);
-      return () => clearTimeout(timerBack);
-    }, 1200);
-
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  const handlePrev = () => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
-    }
-  };
-
-  const handleNext = () => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
-    }
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next = (active + (e.key === 'ArrowRight' ? 1 : -1) + BOARDS.length) % BOARDS.length;
+    setActive(next);
+    tabRefs.current[next]?.focus();
   };
 
   return (
-    <>
-      <Navbar />
+    <section className={styles.section} id="systems">
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="02 EDGE COMPUTE & SILICON SPECIFICATIONS"
+          title="FLIGHT CONTROLLERS."
+          lede="Board-level parameters for the ELARA flight controller line and the ARIA 50A speed controller that pairs with it. Full documentation lives on each product page."
+        />
 
-      <main>
-        {/* Page 1: Hero */}
-        <section className="landing-section section-left" id="releases">
-
-
-          <div className="video-background-container">
-            <video 
-              ref={heroVideoRef}
-              autoPlay 
-              muted={isHeroMuted} 
-              loop 
-              playsInline 
-              className="video-background"
+        <div className={styles.tabs} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
+          {BOARDS.map((b, i) => (
+            <button
+              key={b.id}
+              ref={(el) => {
+                tabRefs.current[i] = el;
+              }}
+              type="button"
+              role="tab"
+              id={`hw-tab-${b.id}`}
+              aria-selected={i === active}
+              aria-controls="hw-panel"
+              tabIndex={i === active ? 0 : -1}
+              className={`${styles.tab} ${i === active ? styles.tabActive : ''}`}
+              onClick={() => setActive(i)}
             >
-              <source src={optimizeCloudinary("https://res.cloudinary.com/kpa1wv3h/video/upload/v1787235555/Video_Project_ppyupt.mp4")} type="video/mp4" />
-            </video>
-            <div className="video-overlay" />
+              {i === active && <motion.span layoutId="hw-tab-pill" className={styles.tabPill} transition={SPRING} />}
+              <span className={styles.tabLabel}>{b.tab}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.lab} role="tabpanel" id="hw-panel" aria-labelledby={`hw-tab-${board.id}`}>
+          <div className={styles.labMedia}>
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={board.id}
+                className={`${board.image.fit === 'contain' ? styles.labImageContain : styles.labImage} ${board.id === 'aria' ? styles.labImageAria : ''}`}
+                src={board.image.src}
+                alt={board.image.alt}
+                width={board.image.width}
+                height={board.image.height}
+                decoding="async"
+                initial={{ opacity: 0, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+              />
+            </AnimatePresence>
           </div>
-          <div className="section-content">
-         <TypewriterHeading
-  as="h2"
-  className="section-title"
-  lines={['REAL-TIME INTELLIGENCE,', 'FROM EVERY', 'FLIGHT']}
-/>
-            <div className="hero-btn-group">
-              <a href="#platforms" className="btn font-mono">
-                explore
-              </a>
-              <button 
-                onClick={() => setIsResumeModalOpen(true)} 
-                className="btn font-mono btn-primary"
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={board.id}
+              className={styles.labBody}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <h3 className={styles.labTitle}>{board.name}</h3>
+              <p className={styles.labKind}>{board.kind}</p>
+              <p className={styles.labDesc}>{board.desc}</p>
+              <table className={styles.specTable}>
+                <thead>
+                  <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Specification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {board.specs.map(([param, spec]) => (
+                    <tr key={param}>
+                      <td>{param}</td>
+                      <td>{spec}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Link href={board.href} className={styles.labLink}>
+                Full documentation
+                <ArrowIcon className={styles.labLinkIcon} />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────── 4. Certanity reality engine ───────────── */
+
+function RealityEngine() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [active, setActive] = useState(0);
+  const [hovering, setHovering] = useState(false);
+  const inView = useInView(sectionRef);
+  const scenario = SCENARIOS[active];
+
+  usePlayWhen(videoRef, inView, active);
+
+  return (
+    <section ref={sectionRef} className={styles.section} id="simulation">
+      <div className={styles.container}>
+        <SectionHead
+          eyebrow="03 KERNEL SIMULATION RUNTIME"
+          title="ANSA REALITY ENGINE."
+          lede="Scenario feeds from Certanity's 24+ domain simulators. Each one exercises the same autonomy stack that ships to hardware."
+        />
+
+        <div className={styles.engine}>
+          <div
+            className={styles.viewport}
+            role="tabpanel"
+            id="sim-panel"
+            aria-labelledby={`sim-tab-${scenario.id}`}
+            onPointerEnter={() => setHovering(true)}
+            onPointerLeave={() => setHovering(false)}
+          >
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={scenario.id}
+                style={{ position: 'absolute', inset: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
               >
-                share your resume
-              </button>
+                <LazyVideo
+                  ref={videoRef}
+                  className={scenario.video.fit === 'contain' ? styles.viewportVideoContain : styles.viewportVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  poster={scenario.video.poster}
+                  aria-label={scenario.title}
+                >
+                  <source src={scenario.video.src} type="video/mp4" />
+                </LazyVideo>
+              </motion.div>
+            </AnimatePresence>
+            <div className={styles.viewportShade} />
+            <div className={styles.readouts}>
+              {scenario.readouts.map(([k, v]) => (
+                <span key={k}>
+                  {k} <b>{v}</b>
+                </span>
+              ))}
             </div>
           </div>
-        </section>
 
-        <div className="section-merge-boundary" />
-
-        {/* Page 2: Aligning Human Intent */}
-        <section className="landing-section section-left" id="platforms">
-
-          <div className="video-background-container desktop-only">
-            <LazyVideo autoPlay muted loop playsInline className="video-background">
-              <source src={optimizeCloudinary("https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382884/spaceborn_assets/robot-intent-section-two-vid.mp4")} type="video/mp4" />
-            </LazyVideo>
-            <div className="video-overlay" />
-          </div>
-          <div className="image-background-container mobile-only">
-            <img loading="lazy" src="/images/mobile-ui/image2.webp" alt="Aligning Human Intent With Robot Action" className="image-background mobile-only" />
-            <div className="overlay-left-dark" />
-          </div>
-          <div className="section-content">
-            <TypewriterHeading
-  as="h2"
-  className="section-title"
-  lines={['ALIGNING HUMAN', 'INTENT WITH', 'ROBOT ACTION']}
-/>
-            <p className="section-body desktop-only">
-              We believe a future where anyone can work with autonomous <br className="desk-br" />
-              systems through natural conversation is fundamentally <br className="desk-br" />
-              more powerful than one where only engineers can.
-            </p>
-            <p className="section-body mobile-only">
-              We believe a future where only the hot work is left to autonomous systems through robust collaboration that is inherently transparent for dynamic and open environments.
-            </p>
-            <a href="#simulation" className="btn font-mono desktop-only">
-              read more
-            </a>
-            <a href="#simulation" className="btn font-mono mobile-only">
-              SEE THE SYSTEM
-            </a>
-          </div>
-        </section>
-
-        <div className="section-merge-boundary" />
-
-        {/* Page 3: Making Autonomy Human-Centric */}
-        <section className="landing-section section-right" id="simulation">
-
-          <div className="image-background-container">
-            <LazyVideo autoPlay muted loop playsInline className="image-background explore-ansa-bg desktop-only">
-              <source src={optimizeCloudinary("https://res.cloudinary.com/kpa1wv3h/video/upload/v1783382844/spaceborn_assets/explore-ansa-img.mp4")} type="video/mp4" />
-            </LazyVideo>
-            <img loading="lazy" src="/images/mobile-ui/image3.webp" alt="Making Autonomy Human-Centric" className="image-background explore-ansa-bg mobile-only" />
-            <div className="overlay-right-dark" />
-          </div>
-          <div className="section-content">
-           <TypewriterHeading
-  as="h2"
-  className="section-title"
-  lines={['MAKING AUTONOMY', 'HUMAN-CENTRIC']}
-/>
-            <p className="section-body desktop-only">
-              ANSA is a complete autonomous intelligence platform designed to <br />
-              enable robots and drones to understand human intent, navigate complex <br />
-              environments, and execute missions with minimal human intervention.
-            </p>
-            <p className="section-body mobile-only">
-              Spaceborn is a complete autonomous intelligence platform designed to enable robots and drones to understand context, navigate complex environments, and seamlessly interact with teams of human operators.
-            </p>
-            <a href="#systems" className="btn font-mono desktop-only">
-              Explore ANSA
-            </a>
-            <a href="#systems" className="btn font-mono mobile-only">
-              EXPLORE ORCA
-            </a>
-          </div>
-        </section>
-
-        <div className="section-merge-boundary" />
-
-        {/* Page 4: Building the Systems of Autonomy */}
-        <section className="landing-section section-left" id="systems">
-
-          <div className="video-background-container desktop-only">
-            <LazyVideo 
-              ref={systemsVideoRef}
-              autoPlay 
-              muted={isHeroMuted} 
-              loop 
-              playsInline 
-              className="video-background"
-            >
-              <source src={optimizeCloudinary("https://res.cloudinary.com/kpa1wv3h/video/upload/v1785962155/droneCircuitVid_p16yvl.mp4")} type="video/mp4" />
-            </LazyVideo>
-            <div className="overlay-left-dark" />
-          </div>
-          <div className="image-background-container mobile-only">
-            <img loading="lazy" src="/images/mobile-ui/image4.webp" alt="Building the Systems of Autonomy" className="image-background systems-autonomy-bg" />
-            <div className="overlay-left-dark" />
-          </div>
-          <div className="section-content">
-           <TypewriterHeading
-  as="h2"
-  className="section-title"
-  lines={['BUILDING THE', 'SYSTEMS OF', 'AUTONOMY']}
-/>
-            <p className="section-body desktop-only">
-              Spaceborn develops flight controllers, autonomous intelligence <br />
-              platforms, and next-generation robotic systems designed to power the <br />
-              future of autonomous flight, ground mobility, and intelligent machines.
-            </p>
-            <p className="section-body mobile-only">
-              Spaceborn develops flight software, autonomous intelligence platforms, and next generation robotic systems designed to pave the future of autonomous flight, space industry, and intelligent machines.
-            </p>
-            <a href="#thoth" className="btn font-mono desktop-only">
-              book your system
-            </a>
-            <a href="#thoth" className="btn font-mono mobile-only">
-              SEE THE SYSTEM
-            </a>
-          </div>
-        </section>
-
-        <div className="section-merge-boundary" />
-
-        {/* Page 5: Putting Humans at the Center */}
-        <section className="landing-section section-right" id="thoth">
-          <div className="image-background-container">
-            <LazyVideo autoPlay muted loop playsInline className="image-background join-mission-bg desktop-only">
-              <source src={optimizeCloudinary("https://res.cloudinary.com/kpa1wv3h/video/upload/v1785966524/womanAndDrone_xjbmqm.mp4")} type="video/mp4" />
-            </LazyVideo>
-            <img loading="lazy" src="/images/mobile-ui/image5.webp" alt="Join Our Mission" className="image-background join-mission-bg mobile-only" />
-            <div className="overlay-right-dark" />
-          </div>
-          <div className="section-content">
-            <TypewriterHeading
-  as="h2"
-  className="section-title"
-  lines={['PUTTING HUMANS', 'AT THE CENTER', 'OF AUTONOMY']}
-/>
-            <p className="section-body desktop-only">
-              Spaceborn was founded on the belief that robots should adapt to humans, not the<br />
-              other way around. We are building the intelligence layer that enables autonomous<br />
-              systems to understand human intent and act with confidence in the real world.
-            </p>
-            <p className="section-body mobile-only">
-              Spaceborn was founded on the belief that robots should adapt to humans, not the<br />
-              other way around. We are building the intelligence layer that enables autonomous<br />
-              systems to understand context and act with confidence in the real world.
-            </p>
-
-            <a href="#simulators-hub" className="btn font-mono">
-              join the mission
-            </a>
-          </div>
-        </section>
-
-        <div className="section-merge-boundary" />
-
-        {/* Page 6: Simulators Horizontal Scroll Container */}
-        <section className="simulators-scroll-section" id="simulators-hub">
-
-          <button 
-            onClick={handlePrev}
-            className={`sim-nav-btn sim-prev-btn ${scrollProgress <= 1 ? 'disabled' : ''}`}
-            aria-label="Previous simulator"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          
-          <button 
-            onClick={handleNext}
-            className={`sim-nav-btn sim-next-btn ${scrollProgress >= 99 ? 'disabled' : ''}`}
-            aria-label="Next simulator"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-
-          <div className="simulators-scroll-container" ref={containerRef}>
-            {simulators.map((sim) => (
-              <div 
-                key={sim.id} 
-                className="simulator-panel" 
-                id={`sim-${sim.id}`}
-                style={
-                  sim.image 
-                    ? { 
-                        '--bg-image': `url(${sim.image})`,
-                        '--bg-image-mobile': `url(${sim.imageMobile || sim.image})`
-                      } as React.CSSProperties 
-                    : undefined
-                }
+          <div className={styles.simList} role="tablist" aria-label="Simulation scenarios" aria-orientation="vertical">
+            {SCENARIOS.map((s, i) => (
+              <motion.button
+                key={s.id}
+                type="button"
+                role="tab"
+                id={`sim-tab-${s.id}`}
+                aria-selected={i === active}
+                aria-controls="sim-panel"
+                className={`${styles.simTab} ${i === active ? styles.simTabActive : ''}`}
+                onClick={() => setActive(i)}
+                whileTap={PRESS}
+                transition={SPRING}
               >
-                {sim.video && (
-                  <div className="video-background-container desktop-only">
-                    <LazyVideo 
-                      ref={(el) => {
-                        simVideoRefs.current[sim.id] = el;
-                      }}
-                      autoPlay 
-                      muted={isHeroMuted} 
-                      loop 
-                      playsInline 
-                      className="video-background"
-                    >
-                      <source src={sim.video} type="video/mp4" />
-                    </LazyVideo>
-                    <div className="video-overlay" />
-                  </div>
+                <span className={styles.simTabTitle}>{s.title}</span>
+                <span className={styles.simTabDesc}>{s.desc}</span>
+                {i === active && (
+                  <span
+                    key={`progress-${active}`}
+                    className={`${styles.progress} ${!inView || hovering ? styles.progressPaused : ''}`}
+                    style={{ animationDuration: `${CYCLE_MS}ms` }}
+                    onAnimationEnd={() => setActive((a) => (a + 1) % SCENARIOS.length)}
+                  />
                 )}
-                <div className="sim-content" style={{ position: 'relative', zIndex: 2 }}>
-                  <TypewriterHeading
-  as="h3"
-  className="sim-title"
-  lines={[sim.title]}
-/>
-                  <p className="sim-desc">{sim.desc}</p>
-                  <a href="#releases" className="btn font-mono">
-                    {sim.cta}
-                  </a>
-                </div>
-              </div>
+              </motion.button>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-          {/* Scroll Indicator */}
-          <div className="scroll-indicator-container">
-            <span className="scroll-hint font-mono">SCROLL TO EXPLORE →</span>
-            <div className="scroll-progress-wrapper">
-              <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
-            </div>
-          </div>
+/* ───────────── Closing ───────────── */
 
-          {/* Persistent Footer Overlay */}
-          <Footer isHome={true} />
-        </section>
+function Closing({ onResume }: { onResume: () => void }) {
+  return (
+    <section className={styles.closing} id="simulators-hub">
+      <span id="thoth" />
+      <div className={`${styles.container} ${styles.closingInner}`}>
+        <Reveal>
+          <h2 className={styles.closingTitle}>BUILD THE AUTONOMOUS MACHINE FUTURE WITH US.</h2>
+        </Reveal>
+        <Reveal className={styles.ctaRow} delay={0.06}>
+          <motion.div whileTap={PRESS} transition={SPRING}>
+            <Link href="/company/contact" className={styles.btnPrimary}>
+              Contact engineering
+            </Link>
+          </motion.div>
+          <motion.button type="button" className={styles.btnGhost} onClick={onResume} whileTap={PRESS} transition={SPRING}>
+            Share your resume
+          </motion.button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+export default function HomePage() {
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <Navbar />
+
+      <main className={styles.page}>
+        <Hero />
+        <ProductGrid />
+        <HardwareLab />
+        <RealityEngine />
+        <Closing onResume={() => setIsResumeModalOpen(true)} />
       </main>
 
-      {/* Global Sound Control */}
-      <button 
-        onClick={handleToggleSound} 
-        className="global-sound-toggle"
-        aria-label={isHeroMuted ? "Unmute background audio" : "Mute background audio"}
-      >
-        {isHeroMuted ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-            <line x1="22" y1="9" x2="16" y2="15"/>
-            <line x1="16" y1="9" x2="22" y2="15"/>
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-          </svg>
-        )}
-        <span className="sound-text font-mono">{isHeroMuted ? "SOUND OFF" : "SOUND ON"}</span>
-      </button>
+      <Footer />
 
       {isResumeModalOpen && (
         <ResumeModal onClose={() => setIsResumeModalOpen(false)} />
       )}
-    </>
+    </MotionConfig>
   );
 }

@@ -1,12 +1,6 @@
 "use client";
 
 import React from "react";
-import { Orbitron } from "next/font/google";
-
-const futuristicFont = Orbitron({
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
-});
 
 const skills = [
   {
