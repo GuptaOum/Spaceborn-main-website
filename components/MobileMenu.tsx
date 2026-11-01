@@ -151,9 +151,9 @@ export default function MobileMenu({ isCareer }: { isCareer?: boolean }) {
 
               {/* Independent Links */}
               <li>
-                <Link href="/deryk" onClick={toggleMenu}>
+                <a href="https://spaceborn-web.vercel.app/" onClick={toggleMenu}>
                   DERYK
-                </Link>
+                </a>
               </li>
               <li>
                 <a href="https://khonsu.in" target="_blank" rel="noopener noreferrer" onClick={toggleMenu}>

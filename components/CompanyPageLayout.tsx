@@ -71,21 +71,14 @@ export default function CompanyPageLayout({
   relatedLinks,
   children,
 }: CompanyPageLayoutProps) {
-  const GREEN_PAGES = ['ansa', 'certanity','fleet manager','mission studio','reality engine',];
-const isGreen = variant === 'platform' || GREEN_PAGES.includes(title.trim().toLowerCase());
-
-const greenBackground = `
-  radial-gradient(ellipse 60% 50% at 10% 15%, rgba(198, 239, 146, 0.28) 0%, transparent 70%),
-  radial-gradient(ellipse 50% 45% at 95% 80%, rgba(120, 190, 140, 0.18) 0%, transparent 70%),
-  linear-gradient(180deg, #0f2a1c 0%, #010101 60%)`
   return (
     <>
       <Navbar />
 
-      <main>
+      <main style={{ background: '#050505' }}>
         <section
-  className={`company-hero ${variant === 'platform' ? 'company-hero-platform' : ''}`}
-  style={isGreen ? { background: greenBackground } : undefined}>
+          className={`company-hero ${variant === 'platform' ? 'company-hero-platform' : ''}`}
+        >
           <h1 className="company-title font-ethno">{title}</h1>
           {subtitle && (
             <p className="company-subtitle font-inter">{subtitle}</p>

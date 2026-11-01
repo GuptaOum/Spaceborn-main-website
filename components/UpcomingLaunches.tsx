@@ -169,22 +169,37 @@ export default function UpcomingLaunches() {
       onMouseLeave={handleMouseLeave}
     >
       <button 
-        className="btn font-mono launches-btn"
+        type="button"
+        className="launches-btn"
         aria-expanded={isOpen}
+        aria-haspopup="true"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        UPCOMING LAUNCHES 
-        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg" className={`chevron ${isOpen ? 'open' : ''}`}>
-          <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <span className="launches-btn-text">UPCOMING LAUNCHES</span>
+        <svg
+          width="8"
+          height="5"
+          viewBox="0 0 8 5"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`chevron ${isOpen ? 'open' : ''}`}
+          aria-hidden="true"
+        >
+          <path d="M1 1L4 4L7 1" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
 
       {isOpen && (
-        <div className="launches-dropdown-panel">
+        <div className="launches-dropdown-panel" role="region" aria-label="Upcoming Launches">
+          <div className="launches-panel-header">
+            <span className="launches-panel-eyebrow">[SCHEDULED FLIGHTS]</span>
+            <span className="launches-panel-count">{DEFAULT_LAUNCHES.length} TARGETS</span>
+          </div>
           <div className="launches-list">
             {dropdownItems.map((launch, index) => (
               <div className="launch-item" key={index}>
                 <div className="launch-image">
-                  <img src={launch.image} alt={launch.title} />
+                  <img src={launch.image} alt={launch.title} loading="lazy" />
                 </div>
                 <div className="launch-info">
                   <h3 className="launch-title">{launch.title}</h3>
@@ -194,19 +209,9 @@ export default function UpcomingLaunches() {
             ))}
           </div>
           <div className="launches-footer">
-            <Link href="/launches" className="all-launches-link font-inter">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="grid-icon">
-                <circle cx="2" cy="2" r="1.5"/>
-                <circle cx="8" cy="2" r="1.5"/>
-                <circle cx="14" cy="2" r="1.5"/>
-                <circle cx="2" cy="8" r="1.5"/>
-                <circle cx="8" cy="8" r="1.5"/>
-                <circle cx="14" cy="8" r="1.5"/>
-                <circle cx="2" cy="14" r="1.5"/>
-                <circle cx="8" cy="14" r="1.5"/>
-                <circle cx="14" cy="14" r="1.5"/>
-              </svg>
-              ALL UPCOMING LAUNCHES
+            <Link href="/launches" className="all-launches-link" onClick={() => setIsOpen(false)}>
+              <span>ALL UPCOMING LAUNCHES</span>
+              <span className="link-arrow" aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
