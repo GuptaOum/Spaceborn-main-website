@@ -337,10 +337,6 @@ function Hero() {
           <h1 className={styles.heroTitle}>
             AUTONOMY, FROM THE SILICON UP.
           </h1>
-          <p className={styles.heroSub}>
-            Flight controllers, edge compute, and the ANSA autonomy OS that runs on them. Built, simulated, and
-            deployed as one stack.
-          </p>
         </div>
       </div>
     </section>
