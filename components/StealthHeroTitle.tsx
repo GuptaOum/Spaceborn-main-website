@@ -1,0 +1,79 @@
+'use client';
+
+/**
+ * Custom Stealth Vector Typography Component
+ * Aligned 45-degree parallel cuts strictly on stroke endings (terminals) only.
+ * Normal architectural corners, junctions, peaks, and continuous closed loops.
+ * Fully responsive SVG with accessible aria-label.
+ */
+export default function StealthHeroTitle({ className }: { className?: string }) {
+  return (
+    <h1 className={className} aria-label="AUTONOMY, FROM THE SILICON UP.">
+      <svg
+        viewBox="0 0 1158 238"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        style={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%' }}
+      >
+        <g transform="translate(10, 0)">
+          {/* Line 1: AUTONOMY, FROM */}
+          {/* A: peak at top, bottom feet end with cut */}
+          <path d="M 39,0 L 78,84 L 62,100 L 52,74 L 26,74 L 16,84 L 0,100 Z M 39,22 L 49,58 L 29,58 Z" transform="translate(0, 0)" />
+          {/* U: top open arms end with cut, bottom curved loop */}
+          <path d="M 0,16 L 16,0 L 16,74 Q 16,84 26,84 L 48,84 Q 58,84 58,74 L 58,0 L 74,16 L 74,74 Q 74,100 48,100 L 26,100 Q 0,100 0,74 Z" transform="translate(92, 0)" />
+          {/* T: crossbar ends & stem bottom end with cut */}
+          <path d="M 0,16 L 16,0 L 74,0 L 58,16 L 45,16 L 45,84 L 29,100 L 29,16 L 0,16 Z" transform="translate(180, 0)" />
+          {/* O: closed loop squircle, NO cuts */}
+          <path d="M 24,0 L 52,0 Q 76,0 76,24 L 76,76 Q 76,100 52,100 L 24,100 Q 0,100 0,76 L 0,24 Q 0,0 24,0 Z M 24,16 Q 16,16 16,26 L 16,74 Q 16,84 24,84 L 52,84 Q 60,84 60,74 L 60,26 Q 60,16 52,16 Z" transform="translate(268, 0)" />
+          {/* N: top corners 90 deg, bottom feet end with cut */}
+          <path d="M 0,0 L 16,0 L 60,66 L 60,0 L 76,0 L 76,84 L 60,100 L 16,34 L 16,84 L 0,100 Z" transform="translate(358, 0)" />
+          {/* O: closed loop squircle, NO cuts */}
+          <path d="M 24,0 L 52,0 Q 76,0 76,24 L 76,76 Q 76,100 52,100 L 24,100 Q 0,100 0,76 L 0,24 Q 0,0 24,0 Z M 24,16 Q 16,16 16,26 L 16,74 Q 16,84 24,84 L 52,84 Q 60,84 60,74 L 60,26 Q 60,16 52,16 Z" transform="translate(448, 0)" />
+          {/* M: top corners 90 deg, bottom feet end with cut */}
+          <path d="M 0,0 L 16,0 L 44,52 L 72,0 L 88,0 L 88,84 L 72,100 L 72,30 L 44,74 L 16,30 L 16,84 L 0,100 Z" transform="translate(538, 0)" />
+          {/* Y: branches and stem bottom end with cut */}
+          <path d="M 0,16 L 16,0 L 37,46 L 58,0 L 74,16 L 45,56 L 45,84 L 29,100 L 29,56 Z" transform="translate(640, 0)" />
+          {/* Comma */}
+          <path d="M 4,80 L 18,80 L 10,108 L 0,102 Z" transform="translate(728, 0)" />
+          {/* F: top-left corner 90 deg, arms and stem end with cut */}
+          <path d="M 0,0 L 66,0 L 50,16 L 16,16 L 16,40 L 50,40 L 34,56 L 16,56 L 16,84 L 0,100 Z" transform="translate(792, 0)" />
+          {/* R: top-left corner 90 deg, closed bowl, stem & leg end with cut */}
+          <path d="M 0,0 L 50,0 Q 72,0 72,25 Q 72,50 50,50 L 74,84 L 58,100 L 36,50 L 16,50 L 16,84 L 0,100 Z M 16,16 L 48,16 Q 56,16 56,25 Q 56,34 48,34 L 16,34 Z" transform="translate(872, 0)" />
+          {/* O: closed loop squircle, NO cuts */}
+          <path d="M 24,0 L 52,0 Q 76,0 76,24 L 76,76 Q 76,100 52,100 L 24,100 Q 0,100 0,76 L 0,24 Q 0,0 24,0 Z M 24,16 Q 16,16 16,26 L 16,74 Q 16,84 24,84 L 52,84 Q 60,84 60,74 L 60,26 Q 60,16 52,16 Z" transform="translate(960, 0)" />
+          {/* M: top corners 90 deg, bottom feet end with cut */}
+          <path d="M 0,0 L 16,0 L 44,52 L 72,0 L 88,0 L 88,84 L 72,100 L 72,30 L 44,74 L 16,30 L 16,84 L 0,100 Z" transform="translate(1050, 0)" />
+
+          {/* Line 2: THE SILICON UP. */}
+          {/* T: crossbar ends & stem bottom end with cut */}
+          <path d="M 0,16 L 16,0 L 74,0 L 58,16 L 45,16 L 45,84 L 29,100 L 29,16 L 0,16 Z" transform="translate(0, 128)" />
+          {/* H: top corners 90 deg, bottom feet end with cut */}
+          <path d="M 0,0 L 16,0 L 16,42 L 58,42 L 58,0 L 74,0 L 74,84 L 58,100 L 58,58 L 16,58 L 16,84 L 0,100 Z" transform="translate(88, 128)" />
+          {/* E: corners 90 deg, arms end with cut */}
+          <path d="M 0,0 L 66,0 L 50,16 L 16,16 L 16,40 L 50,40 L 34,56 L 16,56 L 16,84 L 66,84 L 50,100 L 0,100 Z" transform="translate(176, 128)" />
+          {/* S: terminals end with cut, smooth spine */}
+          <path d="M 56,0 L 72,16 L 24,16 Q 16,16 16,28 Q 16,42 36,46 L 54,50 Q 72,54 72,74 Q 72,100 50,100 L 0,100 L 16,84 L 48,84 Q 56,84 56,80 Q 56,66 52,62 L 36,58 Q 16,54 16,36 Q 16,0 36,0 Z" transform="translate(288, 128)" />
+          {/* I: top flat, bottom stem ends with cut */}
+          <path d="M 0,0 L 16,0 L 16,84 L 0,100 Z" transform="translate(374, 128)" />
+          {/* L: top flat, corner 90 deg, bottom arm ends with cut */}
+          <path d="M 0,0 L 16,0 L 16,84 L 62,84 L 46,100 L 0,100 Z" transform="translate(404, 128)" />
+          {/* I: top flat, bottom stem ends with cut */}
+          <path d="M 0,0 L 16,0 L 16,84 L 0,100 Z" transform="translate(480, 128)" />
+          {/* C: terminals end with cut, smooth back */}
+          <path d="M 58,0 L 74,16 L 24,16 Q 16,16 16,28 L 16,72 Q 16,84 24,84 L 74,84 L 58,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z" transform="translate(510, 128)" />
+          {/* O: closed loop squircle, NO cuts */}
+          <path d="M 24,0 L 52,0 Q 76,0 76,24 L 76,76 Q 76,100 52,100 L 24,100 Q 0,100 0,76 L 0,24 Q 0,0 24,0 Z M 24,16 Q 16,16 16,26 L 16,74 Q 16,84 24,84 L 52,84 Q 60,84 60,74 L 60,26 Q 60,16 52,16 Z" transform="translate(598, 128)" />
+          {/* N: top corners 90 deg, bottom feet end with cut */}
+          <path d="M 0,0 L 16,0 L 60,66 L 60,0 L 76,0 L 76,84 L 60,100 L 16,34 L 16,84 L 0,100 Z" transform="translate(688, 128)" />
+          {/* U: top open arms end with cut, bottom curved loop */}
+          <path d="M 0,16 L 16,0 L 16,74 Q 16,84 26,84 L 48,84 Q 58,84 58,74 L 58,0 L 74,16 L 74,74 Q 74,100 48,100 L 26,100 Q 0,100 0,74 Z" transform="translate(810, 128)" />
+          {/* P: top-left corner 90 deg, closed bowl, stem ends with cut */}
+          <path d="M 0,0 L 48,0 Q 70,0 70,25 Q 70,50 48,50 L 16,50 L 16,84 L 0,100 Z M 16,16 L 46,16 Q 54,16 54,25 Q 54,34 46,34 L 16,34 Z" transform="translate(898, 128)" />
+          {/* Period: clean square baseline dot */}
+          <path d="M 0,100 L 16,100 L 16,84 L 0,84 Z" transform="translate(984, 128)" />
+        </g>
+      </svg>
+    </h1>
+  );
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1530 240" fill="#ffffff" style="background: #000; width: 100%; height: auto;">
+  <g transform="translate(20, 10)">
+    <g transform="translate(0, 0)">
+      <path d="M 32,0 L 48,0 L 80,84 L 64,100 L 64,56 L 16,56 L 16,100 L 0,84 Z
+    M 21,42 L 59,42 L 40,16 Z" transform="translate(0, 0)" />
+<path d="M 0,16 L 16,0 L 16,76 Q 16,84 24,84 L 52,84 Q 60,84 60,76 L 60,0 L 76,16 L 76,84 Q 76,100 60,100 L 16,100 Q 0,100 0,84 Z" transform="translate(94, 0)" />
+<path d="M 0,16 L 16,0 L 74,0 L 58,16 L 45,16 L 45,84 L 29,100 L 29,16 L 16,16 Z" transform="translate(184, 0)" />
+<path d="M 20,0 L 62,0 Q 82,0 82,20 L 82,80 Q 82,100 62,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z
+    M 28.0,16 Q 16,16 16,28.0 L 16,72.0 Q 16,84 28.0,84 L 54.0,84 Q 66,84 66,72.0 L 66,28.0 Q 66,16 54.0,16 Z" transform="translate(272, 0)" />
+<path d="M 0,16 L 16,0 L 16,60 L 62,0 L 78,0 L 78,84 L 62,100 L 62,40 L 16,100 L 0,100 Z" transform="translate(368, 0)" />
+<path d="M 20,0 L 62,0 Q 82,0 82,20 L 82,80 Q 82,100 62,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z
+    M 28.0,16 Q 16,16 16,28.0 L 16,72.0 Q 16,84 28.0,84 L 54.0,84 Q 66,84 66,72.0 L 66,28.0 Q 66,16 54.0,16 Z" transform="translate(460, 0)" />
+<path d="M 0,16 L 16,0 L 44,52 L 72,0 L 88,16 L 88,84 L 72,100 L 72,32 L 44,80 L 16,32 L 16,100 L 0,84 Z" transform="translate(556, 0)" />
+<path d="M 0,16 L 16,0 L 38,48 L 60,0 L 76,16 L 46,58 L 46,84 L 30,100 L 30,58 Z" transform="translate(658, 0)" />
+<path d="M 4,80 L 16,80 L 8,112 L 0,106 Z" transform="translate(748, 0)" />
+    </g>
+    <g transform="translate(0, 124)">
+      <path d="M 0,0 L 66,0 L 50,16 L 16,16 L 16,42 L 52,42 L 36,58 L 16,58 L 16,84 L 0,100 Z" transform="translate(0, 0)" />
+<path d="M 0,0 L 52,0 Q 76,0 76,26 Q 76,50 52,50 L 40,50 L 76,84 L 60,100 L 32,50 L 16,50 L 16,84 L 0,100 Z
+    M 16,16 L 48,16 Q 60,16 60,25 Q 60,36 48,36 L 16,36 Z" transform="translate(80, 0)" />
+<path d="M 20,0 L 62,0 Q 82,0 82,20 L 82,80 Q 82,100 62,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z
+    M 28.0,16 Q 16,16 16,28.0 L 16,72.0 Q 16,84 28.0,84 L 54.0,84 Q 66,84 66,72.0 L 66,28.0 Q 66,16 54.0,16 Z" transform="translate(170, 0)" />
+<path d="M 0,16 L 16,0 L 44,52 L 72,0 L 88,16 L 88,84 L 72,100 L 72,32 L 44,80 L 16,32 L 16,100 L 0,84 Z" transform="translate(266, 0)" />
+<path d="M 0,16 L 16,0 L 74,0 L 58,16 L 45,16 L 45,84 L 29,100 L 29,16 L 16,16 Z" transform="translate(418, 0)" />
+<path d="M 0,16 L 16,0 L 16,42 L 60,42 L 60,0 L 76,16 L 76,84 L 60,100 L 60,58 L 16,58 L 16,84 L 0,100 Z" transform="translate(506, 0)" />
+<path d="M 0,0 L 68,0 L 52,16 L 16,16 L 16,42 L 52,42 L 36,58 L 16,58 L 16,84 L 68,84 L 52,100 L 0,100 Z" transform="translate(596, 0)" />
+<path d="M 58,0 L 74,16 L 24,16 Q 16,16 16,28 Q 16,42 36,46 L 54,50 Q 74,54 74,74 Q 74,100 52,100 L 0,100 L 16,84 L 50,84 Q 58,84 58,82 Q 58,68 54,64 L 36,60 Q 16,56 16,36 Q 16,0 36,0 Z" transform="translate(728, 0)" />
+<path d="M 0,16 L 16,0 L 16,84 L 0,100 Z" transform="translate(816, 0)" />
+<path d="M 0,16 L 16,0 L 16,84 L 64,84 L 48,100 L 0,100 Z" transform="translate(846, 0)" />
+<path d="M 0,16 L 16,0 L 16,84 L 0,100 Z" transform="translate(924, 0)" />
+<path d="M 60,0 L 76,16 L 24,16 Q 16,16 16,28 L 16,72 Q 16,84 24,84 L 76,84 L 60,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z" transform="translate(954, 0)" />
+<path d="M 20,0 L 62,0 Q 82,0 82,20 L 82,80 Q 82,100 62,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z
+    M 28.0,16 Q 16,16 16,28.0 L 16,72.0 Q 16,84 28.0,84 L 54.0,84 Q 66,84 66,72.0 L 66,28.0 Q 66,16 54.0,16 Z" transform="translate(1044, 0)" />
+<path d="M 0,16 L 16,0 L 16,60 L 62,0 L 78,0 L 78,84 L 62,100 L 62,40 L 16,100 L 0,100 Z" transform="translate(1140, 0)" />
+<path d="M 0,16 L 16,0 L 16,76 Q 16,84 24,84 L 52,84 Q 60,84 60,76 L 60,0 L 76,16 L 76,84 Q 76,100 60,100 L 16,100 Q 0,100 0,84 Z" transform="translate(1282, 0)" />
+<path d="M 0,0 L 48,0 Q 72,0 72,27 Q 72,54 48,54 L 16,54 L 16,84 L 0,100 Z
+    M 16,16 L 44,16 Q 56,16 56,27 Q 56,40 44,40 L 16,40 Z" transform="translate(1372, 0)" />
+<path d="M 0,84 L 18,84 L 18,100 L 0,100 Z" transform="translate(1458, 0)" />
+    </g>
+  </g>
+</svg>

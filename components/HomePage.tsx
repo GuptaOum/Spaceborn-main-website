@@ -38,7 +38,7 @@ const TILES: Tile[] = [
   {
     id: 'flight-controller',
     name: 'Flight Controller',
-    tag: '01 AUTONOMY SILICON',
+    tag: 'AUTONOMY SILICON',
     desc: 'ELARA boards from STM32F7 to STM32H7, running the ANSA autonomy stack through one HAL.',
     href: '/systems/flight-cont',
     size: 'wide',
@@ -49,7 +49,7 @@ const TILES: Tile[] = [
   {
     id: 'elara',
     name: 'ELARA SB2',
-    tag: '02 HIGH-PERFORMANCE H7',
+    tag: 'HIGH-PERFORMANCE H7',
     desc: 'High-performance STM32H7 flight controller.',
     href: '/systems/flight-cont',
     size: 'tall',
@@ -60,7 +60,7 @@ const TILES: Tile[] = [
   {
     id: 'aria',
     name: 'ARIA 50A',
-    tag: '03 MOTOR ARCHITECTURE',
+    tag: 'MOTOR ARCHITECTURE',
     desc: 'AM32 electronic speed controller with live current telemetry.',
     href: '/systems/Esc-sys',
     size: 'square',
@@ -71,7 +71,7 @@ const TILES: Tile[] = [
   {
     id: 'hpu',
     name: 'HPU',
-    tag: '04 EDGE SENSOR FUSION',
+    tag: 'EDGE SENSOR FUSION',
     desc: 'Multi-sensor AI edge compute for camera, LiDAR, radar, and GNSS.',
     href: '/systems/edgecompute',
     size: 'square',
@@ -82,7 +82,7 @@ const TILES: Tile[] = [
   {
     id: 'deryk',
     name: 'DERYK',
-    tag: '05 MISSION COGNITION',
+    tag: 'MISSION COGNITION',
     desc: 'Turns operator intent into executable machine action.',
     href: 'https://spaceborn-web.vercel.app/',
     size: 'wide',
@@ -93,7 +93,7 @@ const TILES: Tile[] = [
   {
     id: 'certanity',
     name: 'CERTANITY',
-    tag: '06 SIMULATION RUNTIME',
+    tag: 'SIMULATION RUNTIME',
     desc: '24+ domain simulators. Every control loop is broken here before it flies.',
     href: '/platforms/certainty',
     size: 'square',
@@ -105,7 +105,7 @@ const TILES: Tile[] = [
   {
     id: 'elio',
     name: 'SB ELIO',
-    tag: '07 DUAL-MCU DEV BOARD',
+    tag: 'DUAL-MCU DEV BOARD',
     desc: 'Dual-MCU development board. ESP32-S3 and RP2350 on one platform.',
     href: '/systems/embedded-sdk',
     size: 'square',
@@ -116,7 +116,7 @@ const TILES: Tile[] = [
   {
     id: 'gcs',
     name: 'GROUND CONTROL',
-    tag: '08 50 HZ DIGITAL TWIN',
+    tag: '50 HZ DIGITAL TWIN',
     desc: 'Live attitude and telemetry from the airframe, mirrored on a 3D digital twin at 50 Hz.',
     href: '/platforms/missionstudio',
     size: 'wide',
@@ -199,7 +199,6 @@ const BOARDS: Board[] = [
       alt: 'ARIA 50A electronic speed controller PCB',
       width: 900,
       height: 900,
-      fit: 'contain',
     },
   },
 ];
@@ -669,9 +668,14 @@ function Closing({ onResume }: { onResume: () => void }) {
         </Reveal>
         <Reveal className={styles.ctaRow} delay={0.06}>
           <motion.div whileTap={PRESS} transition={SPRING}>
-            <Link href="/company/contact" className={styles.btnPrimary}>
+            <a
+              href="https://www.linkedin.com/in/adarsh-kumar-ab8111377?originalSubdomain=in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.btnPrimary}
+            >
               Contact engineering
-            </Link>
+            </a>
           </motion.div>
           <motion.button type="button" className={styles.btnGhost} onClick={onResume} whileTap={PRESS} transition={SPRING}>
             Share your resume

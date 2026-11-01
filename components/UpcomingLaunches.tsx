@@ -175,7 +175,7 @@ export default function UpcomingLaunches() {
         aria-haspopup="true"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="launches-btn-text">UPCOMING LAUNCHES</span>
+        <span className="launches-btn-text">RELEASES</span>
         <svg
           width="8"
           height="5"
@@ -210,7 +210,7 @@ export default function UpcomingLaunches() {
           </div>
           <div className="launches-footer">
             <Link href="/launches" className="all-launches-link" onClick={() => setIsOpen(false)}>
-              <span>ALL UPCOMING LAUNCHES</span>
+              <span>ALL RELEASES</span>
               <span className="link-arrow" aria-hidden="true">→</span>
             </Link>
           </div>

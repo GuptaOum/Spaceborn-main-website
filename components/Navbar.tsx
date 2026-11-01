@@ -17,7 +17,7 @@ export const DROPDOWN_NAV: Record<DropdownKey, { label: string; items: NavItem[]
     label: 'PLATFORMS',
     items: [
       { label: 'ANSA', href: '/platforms/ansa' },
-      { label: 'Certanity', href: '/platforms/certainty' },
+      { label: 'Certanity', href: 'https://certanity.com/' },
       { label: 'Mission Studio', href: '/platforms/missionstudio' },
       { label: 'Fleet Manager', href: '/platforms/fleet-manager' },
       { label: 'Downloads', href: '/platforms/downloads' },
@@ -78,8 +78,29 @@ const CLOSE_DELAY_MS = 150;
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
+  const [hidden, setHidden] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (openDropdown) {
+        setHidden(false);
+        return;
+      }
+      if (currentY > 60 && currentY > lastScrollY.current + 6) {
+        setHidden(true);
+      } else if (currentY < lastScrollY.current - 6 || currentY <= 30) {
+        setHidden(false);
+      }
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [openDropdown]);
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -132,7 +153,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="navbar-wrapper">
+    <header className={`navbar-wrapper${hidden ? ' is-hidden' : ''}`}>
       <nav className="navbar" ref={navRef} aria-label="Main Navigation">
         <Link href="/" className="logo" aria-label="Spaceborn Home">
           <img
