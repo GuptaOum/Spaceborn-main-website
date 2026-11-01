@@ -7,7 +7,6 @@ import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-
 import ResumeModal from './ResumeModal';
 import Footer from './Footer';
 import Navbar from './Navbar';
-import RenderTileGrid from './RenderTileGrid';
 import styles from './HomePage.module.css';
 
 const SPRING = { type: 'spring', stiffness: 100, damping: 20 } as const;
@@ -699,7 +698,6 @@ export default function HomePage() {
         <ProductGrid />
         <HardwareLab />
         <RealityEngine />
-        <RenderTileGrid />
         <Closing onResume={() => setIsResumeModalOpen(true)} />
       </main>
 
