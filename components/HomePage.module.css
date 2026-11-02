@@ -32,17 +32,17 @@
 
 .container {
   width: 100%;
-  max-width: 1380px;
+  max-width: 1720px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 clamp(24px, 2.5vw, 48px);
 }
 
 /* ───────────── Hero ───────────── */
 
 .hero {
   position: relative;
-  height: clamp(680px, 95svh, 980px);
-  padding: 76px 24px 20px;
+  height: clamp(660px, 92svh, 880px);
+  padding: 76px clamp(24px, 2.5vw, 48px) 20px;
   overflow: hidden;
   background: #000000;
 }
@@ -86,9 +86,9 @@
   justify-content: flex-end;
   align-items: flex-start;
   padding-top: 96px;
-  padding-bottom: clamp(36px, 4.5vh, 48px);
-  padding-left: clamp(28px, 2.5vw, 48px);
-  padding-right: clamp(28px, 2.5vw, 48px);
+  padding-bottom: clamp(28px, 4vh, 44px);
+  padding-left: clamp(24px, 2.5vw, 44px);
+  padding-right: clamp(24px, 2.5vw, 44px);
   pointer-events: none;
 }
 
@@ -114,9 +114,9 @@
   flex-wrap: wrap;
   align-items: center;
   font-family: var(--font-spacex, 'D-DIN', 'DIN Alternate', var(--sans));
-  font-size: clamp(34px, min(4.8vw, 8.5svh), 76px);
+  font-size: clamp(32px, 3.2vw, 54px);
   font-weight: 700;
-  line-height: 0.98;
+  line-height: 1.0;
   letter-spacing: 0.01em;
   text-transform: uppercase;
 }
@@ -233,7 +233,7 @@
 .tiles {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-auto-rows: clamp(300px, 29vw, 420px);
+  grid-auto-rows: clamp(300px, 24vw, 430px);
   grid-auto-flow: dense;
   gap: 16px;
 }
