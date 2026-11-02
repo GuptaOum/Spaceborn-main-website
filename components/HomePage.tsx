@@ -450,7 +450,7 @@ function Hero() {
         </video>
         <div className={styles.heroVignette} />
 
-        <div className={`${styles.container} ${styles.heroContent}`}>
+        <div className={styles.heroContent}>
           <h1 className={styles.heroTitle} aria-label="AUTONOMY, FROM THE SILICON UP">
             <HeroTitleCodeDecode inView={inView} />
           </h1>
