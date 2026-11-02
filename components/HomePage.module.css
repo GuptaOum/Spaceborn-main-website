@@ -1027,20 +1027,44 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 6px;
+    gap: 7px;
+    filter: 
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95))
+      drop-shadow(0 10px 30px rgba(0, 0, 0, 0.85))
+      drop-shadow(0 0 24px rgba(255, 255, 255, 0.26))
+      drop-shadow(0 0 50px rgba(200, 225, 255, 0.12));
   }
 
   .decodeRow {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: clamp(31px, 9vw, 41px);
-    line-height: 1.02;
-    letter-spacing: 0.04em;
-    transform: scaleY(1.18);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", var(--font-spacex), var(--sans);
+    font-size: clamp(32px, 9vw, 42px);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    transform: scaleY(1.06);
     transform-origin: center center;
     text-align: center;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.2);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .charResolved {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 28%, #E4EBF4 72%, #CAD3DE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+  }
+
+  .charWave {
+    -webkit-text-fill-color: #ffffff;
+    color: #ffffff;
+    text-shadow:
+      0 0 8px rgba(255, 255, 255, 0.95),
+      0 0 20px rgba(255, 255, 255, 0.5);
   }
 
   .decodeWord {
