@@ -57,7 +57,7 @@ const TILES: Tile[] = [
     href: '/systems/flight-cont',
     size: 'tall',
     image: `${CLD_USER}/image/upload/v1793623358/spaceborn_media/home/elara-sb2.webp`,
-    video: `${CLD_USER}/video/upload/v1793623357/spaceborn_media/home/elara-sb2.mp4`,
+    video: `${CLD_USER}/video/upload/v1793631026/spaceborn_media/home/elara-sb2.mp4`,
     alt: 'ELARA SB2 flight controller on a dark surface',
   },
   {
