@@ -55,6 +55,17 @@
 html {
   scroll-behavior: smooth;
   background-color: #010101 !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a, [role="button"], .tappable {
+  touch-action: manipulation;
+}
+
+button, [role="button"], .tab, .chip, .drag-handle {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 body {

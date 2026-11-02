@@ -575,6 +575,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   return (
     <motion.div
       className={`${styles.tileCell} ${styles[tile.size]}`}
+      data-tile={tile.id}
       initial={reduceMotion ? false : 'hidden'}
       whileInView="shown"
       viewport={{ once: true, margin: '-80px' }}
@@ -785,6 +786,63 @@ function RealityEngine() {
               </motion.div>
             </AnimatePresence>
             <div className={styles.viewportShade} />
+
+            {/* Mobile Video Frame Interactive Overlay: Story Segments & Scenario Pills */}
+            <div className={styles.simMobileBar}>
+              <div className={styles.simMobileSegments}>
+                {SCENARIOS.map((s, i) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={styles.simSegmentTrack}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActive(i);
+                    }}
+                    aria-label={`Switch to ${s.title}`}
+                  >
+                    <div
+                      className={`${styles.simSegmentFill} ${
+                        i < active ? styles.simSegmentDone : i === active ? styles.simSegmentActive : ''
+                      } ${!inView || hovering ? styles.progressPaused : ''}`}
+                      style={i === active ? { animationDuration: `${CYCLE_MS}ms` } : undefined}
+                      onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % SCENARIOS.length) : undefined}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <div className={styles.simMobilePills}>
+                {SCENARIOS.map((s, i) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={`${styles.simMobilePill} ${i === active ? styles.simMobilePillActive : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActive(i);
+                    }}
+                  >
+                    {i === 0 ? 'GPS-DENIED' : i === 1 ? '128 SWARM' : 'INSPECTION'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Tap left/right to cycle scenarios directly on video frame */}
+            <button
+              type="button"
+              className={styles.simTapLeft}
+              aria-label="Previous scenario"
+              onClick={() => setActive((a) => (a - 1 + SCENARIOS.length) % SCENARIOS.length)}
+            />
+            <button
+              type="button"
+              className={styles.simTapRight}
+              aria-label="Next scenario"
+              onClick={() => setActive((a) => (a + 1) % SCENARIOS.length)}
+            />
+
             <div className={styles.readouts}>
               {scenario.readouts.map(([k, v]) => (
                 <span key={k}>
