@@ -56,8 +56,8 @@ const TILES: Tile[] = [
     desc: 'High-performance STM32H7 flight controller.',
     href: '/systems/flight-cont',
     size: 'tall',
-    image: `${CLD_USER}/image/upload/v1793616838/spaceborn_media/home/elara-sb2.webp`,
-    video: `${CLD_USER}/video/upload/v1793619272/spaceborn_media/home/elara-sb2.mp4`,
+    image: `${CLD_USER}/image/upload/v1793623358/spaceborn_media/home/elara-sb2.webp`,
+    video: `${CLD_USER}/video/upload/v1793623357/spaceborn_media/home/elara-sb2.mp4`,
     alt: 'ELARA SB2 flight controller on a dark surface',
   },
   {
@@ -181,7 +181,7 @@ const BOARDS: Board[] = [
       ['Autonomy stack', 'ANSA VIA HAL'],
     ],
     href: '/systems/flight-cont',
-    image: { src: `${CLD_USER}/image/upload/v1793616838/spaceborn_media/home/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
+    image: { src: `${CLD_USER}/image/upload/v1793623358/spaceborn_media/home/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
   },
   {
     id: 'aria',
