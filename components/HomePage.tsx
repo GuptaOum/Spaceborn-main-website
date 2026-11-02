@@ -507,6 +507,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   }, [tile.video, reduceMotion]);
 
   const start = () => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     isHoveredRef.current = true;
     if (stopTimeoutRef.current) {
       clearTimeout(stopTimeoutRef.current);
@@ -515,7 +516,6 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
 
     const video = videoRef.current;
     if (!video || reduceMotion) return;
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
     if (video.currentTime >= (video.duration || 5) - 0.2) {
       video.currentTime = 0;
@@ -538,6 +538,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   };
 
   const stop = () => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     isHoveredRef.current = false;
     setPlaying(false);
 
@@ -576,6 +577,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
             ref={videoRef}
             className={`${styles.tileVideo} ${playing ? styles.tileVideoOn : ''}`}
             style={tile.position ? { objectPosition: tile.position } : undefined}
+            autoPlay
             muted
             loop
             playsInline

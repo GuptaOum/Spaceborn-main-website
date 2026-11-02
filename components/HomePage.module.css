@@ -1109,6 +1109,11 @@
     bottom: 20px;
   }
 
+  /* Continuous video playback on mobile tiles regardless of touch */
+  .tileVideo {
+    opacity: 1 !important;
+  }
+
   .tileTitle {
     font-size: 20px;
   }
