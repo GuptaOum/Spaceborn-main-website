@@ -463,6 +463,7 @@ function Hero() {
 /* ───────────── 2. Product grid ───────────── */
 
 function ProductTile({ tile, index }: { tile: Tile; index: number }) {
+  const tileRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const isHoveredRef = useRef(false);
@@ -471,6 +472,39 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   const reduceMotion = useReducedMotion();
   const isAria = tile.id === 'aria';
   const isGcs = tile.id === 'gcs';
+
+  // Mobile In-View Auto-Playback: Plays video when scrolled into view on mobile
+  useEffect(() => {
+    if (!tile.video || reduceMotion) return;
+    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!isTouch) return;
+
+    const el = tileRef.current;
+    const video = videoRef.current;
+    if (!el || !video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          const promise = video.play();
+          playPromiseRef.current = promise;
+          if (promise) {
+            promise
+              .then(() => setPlaying(true))
+              .catch(() => {});
+          }
+        } else {
+          video.pause();
+          setPlaying(false);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [tile.video, reduceMotion]);
 
   const start = () => {
     isHoveredRef.current = true;
@@ -548,9 +582,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
             preload="auto"
             aria-hidden="true"
             onPlaying={() => {
-              if (isHoveredRef.current) {
-                setPlaying(true);
-              }
+              setPlaying(true);
             }}
           >
             <source src={tile.video} type="video/mp4" />
@@ -574,6 +606,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
 
   return (
     <motion.div
+      ref={tileRef}
       className={`${styles.tileCell} ${styles[tile.size]}`}
       data-tile={tile.id}
       initial={reduceMotion ? false : 'hidden'}
@@ -787,61 +820,30 @@ function RealityEngine() {
             </AnimatePresence>
             <div className={styles.viewportShade} />
 
-            {/* Mobile Video Frame Interactive Overlay: Story Segments & Scenario Pills */}
-            <div className={styles.simMobileBar}>
-              <div className={styles.simMobileSegments}>
-                {SCENARIOS.map((s, i) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={styles.simSegmentTrack}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActive(i);
-                    }}
-                    aria-label={`Switch to ${s.title}`}
-                  >
-                    <div
-                      className={`${styles.simSegmentFill} ${
-                        i < active ? styles.simSegmentDone : i === active ? styles.simSegmentActive : ''
-                      } ${!inView || hovering ? styles.progressPaused : ''}`}
-                      style={i === active ? { animationDuration: `${CYCLE_MS}ms` } : undefined}
-                      onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % SCENARIOS.length) : undefined}
-                    />
-                  </button>
-                ))}
-              </div>
-
-              <div className={styles.simMobilePills}>
-                {SCENARIOS.map((s, i) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={`${styles.simMobilePill} ${i === active ? styles.simMobilePillActive : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActive(i);
-                    }}
-                  >
-                    {i === 0 ? 'GPS-DENIED' : i === 1 ? '128 SWARM' : 'INSPECTION'}
-                  </button>
-                ))}
-              </div>
+            {/* Preserved Line Progress directly on top of the video */}
+            <div className={styles.simLineProgress}>
+              {SCENARIOS.map((s, i) => (
+                <div
+                  key={s.id}
+                  className={styles.simSegmentTrack}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActive(i);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Switch to ${s.title}`}
+                >
+                  <div
+                    className={`${styles.simSegmentFill} ${
+                      i < active ? styles.simSegmentDone : i === active ? styles.simSegmentActive : ''
+                    } ${!inView || hovering ? styles.progressPaused : ''}`}
+                    style={i === active ? { animationDuration: `${CYCLE_MS}ms` } : undefined}
+                    onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % SCENARIOS.length) : undefined}
+                  />
+                </div>
+              ))}
             </div>
-
-            {/* Tap left/right to cycle scenarios directly on video frame */}
-            <button
-              type="button"
-              className={styles.simTapLeft}
-              aria-label="Previous scenario"
-              onClick={() => setActive((a) => (a - 1 + SCENARIOS.length) % SCENARIOS.length)}
-            />
-            <button
-              type="button"
-              className={styles.simTapRight}
-              aria-label="Next scenario"
-              onClick={() => setActive((a) => (a + 1) % SCENARIOS.length)}
-            />
 
             <div className={styles.readouts}>
               {scenario.readouts.map(([k, v]) => (
@@ -850,6 +852,34 @@ function RealityEngine() {
                 </span>
               ))}
             </div>
+          </div>
+
+          {/* Scenario Tabs OUTSIDE the video overlay for mobile view (styled exactly like Flight Controller tabs) */}
+          <div className={styles.simMobileTabs} role="tablist" aria-label="Simulation scenarios">
+            {SCENARIOS.map((s, i) => {
+              const label = i === 0 ? 'GPS-DENIED' : i === 1 ? '128 SWARM' : 'INSPECTION';
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="tab"
+                  id={`sim-mob-tab-${s.id}`}
+                  aria-selected={i === active}
+                  tabIndex={i === active ? 0 : -1}
+                  className={`${styles.simMobileTab} ${i === active ? styles.simMobileTabActive : ''}`}
+                  onClick={() => setActive(i)}
+                >
+                  {i === active && (
+                    <motion.span
+                      layoutId="sim-mobile-tab-pill"
+                      className={styles.simMobileTabPill}
+                      transition={SPRING}
+                    />
+                  )}
+                  <span className={styles.simMobileTabLabel}>{label}</span>
+                </button>
+              );
+            })}
           </div>
 
           <div className={styles.simList} role="tablist" aria-label="Simulation scenarios" aria-orientation="vertical">
