@@ -75,3 +75,12 @@ __pycache__/
 .claude/
 google_adk_workshop/
 scratch_agent.py
+
+# Local upload scripts and scratch docs
+scripts/upload_*.mjs
+scripts/extract_*.mjs
+*.docx
+
+# Agent & local assistant workspaces
+.agents/
+.cursor/

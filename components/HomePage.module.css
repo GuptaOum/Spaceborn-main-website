@@ -90,17 +90,102 @@
 }
 
 .heroTitle {
-  grid-column: 1 / span 8;
-  margin: 0 0 0 -0.02em;
-  max-width: 10em;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
   font-family: var(--font-spacex, 'D-DIN', 'DIN Alternate', var(--sans));
-  font-size: clamp(38px, min(5.2vw, 9.5svh), 82px);
+  color: var(--text-primary);
+}
+
+.decodeBoard {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.7vw, 10px);
+  user-select: none;
+  cursor: default;
+}
+
+.decodeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-family: var(--font-spacex, 'D-DIN', 'DIN Alternate', var(--sans));
+  font-size: clamp(34px, min(4.8vw, 8.5svh), 76px);
   font-weight: 700;
-  line-height: 0.96;
+  line-height: 0.98;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  text-wrap: balance;
-  color: var(--text-primary);
+}
+
+.decodeWord {
+  display: inline-flex;
+  align-items: center;
+}
+
+.charBox {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.charSizer {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.decodeChar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 140ms ease-out, transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.charHidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.charWave {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.95),
+    0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.charResolved {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+.decodeSpace {
+  display: inline-block;
+  width: 0.32em;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .heroSub {
@@ -182,6 +267,7 @@
   z-index: -2;
   transform: scale(1);
   transition: transform 600ms var(--ease-out);
+  pointer-events: none;
 }
 
 .tileImage,
@@ -191,6 +277,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .tileImageContain {
@@ -211,7 +300,9 @@
 
 .tileVideo {
   opacity: 0;
-  transition: opacity 300ms ease;
+  pointer-events: none;
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
 }
 
 .tileVideoOn {
@@ -232,6 +323,29 @@
   right: 64px;
   bottom: 24px;
 }
+
+/* Ground Control: Right-aligned text block while preserving uniform SpaceX D-DIN typography */
+.tileGcs .tileScrim {
+  background:
+    linear-gradient(270deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 100%),
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.tileGcs .tileText {
+  left: auto;
+  right: 56px;
+  bottom: 24px;
+  max-width: 440px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.tileGcs .tileDesc {
+  text-align: right;
+}
+
 
 .tileTitle {
   margin: 0;
@@ -425,7 +539,7 @@
   font-size: 15px;
   line-height: 1.58;
   letter-spacing: -0.008em;
-  color: #a8a8b2;
+  color: rgba(255, 255, 255, 0.94);
   text-wrap: pretty;
 }
 
@@ -677,7 +791,7 @@
   font-size: clamp(15px, 1.15vw, 17px);
   line-height: 1.62;
   letter-spacing: -0.012em;
-  color: #a8a8b2;
+  color: rgba(255, 255, 255, 0.94);
   text-wrap: pretty;
 }
 
@@ -721,37 +835,7 @@
   margin-bottom: 6px;
 }
 
-/* Ground Control: Right-Aligned & Consistent Hover Reveal */
-.tileGcs .tileScrim {
-  background:
-    linear-gradient(270deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%),
-    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
-}
 
-.tileGcs .tileText {
-  left: auto;
-  right: 56px;
-  bottom: 24px;
-  max-width: 440px;
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.tileGcs .tileTitle {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-}
-
-.tileGcs .tileDesc {
-  text-align: right;
-  max-width: 40ch;
-  text-transform: none;
-}
 
 
 /* ───────────── Closing ───────────── */

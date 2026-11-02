@@ -18,7 +18,10 @@ const cldVideo = (path: string, width: number) =>
   `${CLD}/video/upload/f_auto,q_auto:good,w_${width},c_limit/${path}.mp4`;
 const cldPoster = (path: string, width: number) =>
   `${CLD}/video/upload/so_1,f_auto,q_auto,w_${width},c_limit/${path}.jpg`;
-const MEDIA = '/media/home';
+
+const CLD_USER = 'https://res.cloudinary.com/jyr596tn';
+const cldUserImg = (file: string) => `${CLD_USER}/image/upload/f_auto,q_auto:good/spaceborn_media/home/${file}`;
+const cldUserVid = (file: string) => `${CLD_USER}/video/upload/f_auto,q_auto:good/spaceborn_media/home/${file}.mp4`;
 
 type Tile = {
   id: string;
@@ -53,8 +56,8 @@ const TILES: Tile[] = [
     desc: 'High-performance STM32H7 flight controller.',
     href: '/systems/flight-cont',
     size: 'tall',
-    image: `${MEDIA}/elara-sb2.webp`,
-    video: `${MEDIA}/elara-sb2.mp4`,
+    image: `${CLD_USER}/image/upload/v1793616838/spaceborn_media/home/elara-sb2.webp`,
+    video: `${CLD_USER}/video/upload/v1793619272/spaceborn_media/home/elara-sb2.mp4`,
     alt: 'ELARA SB2 flight controller on a dark surface',
   },
   {
@@ -75,7 +78,7 @@ const TILES: Tile[] = [
     desc: 'Multi-sensor AI edge compute for camera, LiDAR, radar, and GNSS.',
     href: '/systems/edgecompute',
     size: 'square',
-    image: `${MEDIA}/hpu.webp`,
+    image: cldUserImg('hpu.webp'),
     alt: 'HPU edge compute board, 3D render',
     fit: 'contain',
   },
@@ -95,7 +98,7 @@ const TILES: Tile[] = [
     name: 'CERTANITY',
     tag: 'SIMULATION RUNTIME',
     desc: '24+ domain simulators. Every control loop is broken here before it flies.',
-    href: '/platforms/certainty',
+    href: 'https://certanity.com/',
     size: 'square',
     image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
     video: cldVideo('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
@@ -109,7 +112,7 @@ const TILES: Tile[] = [
     desc: 'Dual-MCU development board. ESP32-S3 and RP2350 on one platform.',
     href: '/systems/embedded-sdk',
     size: 'square',
-    image: `${MEDIA}/sb-elio.webp`,
+    image: cldUserImg('sb-elio.webp'),
     alt: 'SB ELIO development board',
     fit: 'contain',
   },
@@ -120,8 +123,8 @@ const TILES: Tile[] = [
     desc: 'Live attitude and telemetry from the airframe, mirrored on a 3D digital twin at 50 Hz.',
     href: '/platforms/missionstudio',
     size: 'wide',
-    image: `${MEDIA}/gcs-twin.webp`,
-    video: `${MEDIA}/gcs-twin.mp4`,
+    image: cldUserImg('gcs-twin.webp'),
+    video: cldUserVid('gcs-twin'),
     alt: 'ANSA digital twin cockpit mirroring a hand-tilted IMU board on the attitude indicator and 3D drone model',
   },
 ];
@@ -150,7 +153,7 @@ const BOARDS: Board[] = [
       ['Autonomy stack', 'ANSA VIA HAL'],
     ],
     href: '/systems/flight-cont',
-    image: { src: `${MEDIA}/elara-sb0-wide.webp`, alt: 'ELARA SB0 flight controller, top view', width: 1280, height: 960 },
+    image: { src: cldUserImg('elara-sb0-wide.webp'), alt: 'ELARA SB0 flight controller, top view', width: 1280, height: 960 },
   },
   {
     id: 'sb1',
@@ -164,7 +167,7 @@ const BOARDS: Board[] = [
       ['Autonomy stack', 'ANSA VIA HAL'],
     ],
     href: '/systems/flight-cont',
-    image: { src: `${MEDIA}/elara-sb1.webp`, alt: 'ELARA SB1 flight controller wired on the bench', width: 1190, height: 896 },
+    image: { src: cldUserImg('elara-sb1.webp'), alt: 'ELARA SB1 flight controller wired on the bench', width: 1190, height: 896 },
   },
   {
     id: 'sb2',
@@ -178,7 +181,7 @@ const BOARDS: Board[] = [
       ['Autonomy stack', 'ANSA VIA HAL'],
     ],
     href: '/systems/flight-cont',
-    image: { src: `${MEDIA}/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
+    image: { src: `${CLD_USER}/image/upload/v1793616838/spaceborn_media/home/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
   },
   {
     id: 'aria',
@@ -237,7 +240,10 @@ const SCENARIOS: Scenario[] = [
     title: 'Industrial inspection cell',
     desc: 'Four robot stations, a conveyor, and an inspection line in a simulated factory, proven before any arm moves on the floor.',
     readouts: [['STATIONS', '4'], ['LINE', 'INSPECTION'], ['DOMAIN', 'INDUSTRIAL']],
-    video: { src: `${MEDIA}/sim-factory.mp4`, poster: `${MEDIA}/sim-factory.webp` },
+    video: {
+      src: `${CLD_USER}/video/upload/v1793615952/spaceborn_media/home/sim-factory.mp4`,
+      poster: `${CLD_USER}/image/upload/v1793615954/spaceborn_media/home/sim-factory.webp`,
+    },
   },
 ];
 
@@ -306,6 +312,117 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
+const WAVE_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>[]_';
+
+const HERO_LINES: string[][] = [
+  ['AUTONOMY,', 'FROM'],
+  ['THE', 'SILICON', 'UP'],
+];
+
+function HeroTitleCodeDecode({ inView }: { inView: boolean }) {
+  const reduceMotion = Boolean(useReducedMotion());
+  const [triggered, setTriggered] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  useEffect(() => {
+    if (inView && !triggered) {
+      setTriggered(true);
+    }
+  }, [inView, triggered]);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setIsCompleted(true);
+      return;
+    }
+    if (!triggered) return;
+
+    let animId: number;
+    const start = performance.now();
+
+    const tick = () => {
+      const now = performance.now();
+      const diff = now - start;
+      setElapsed(diff);
+
+      if (diff >= 2200) {
+        setIsCompleted(true);
+      } else {
+        animId = requestAnimationFrame(tick);
+      }
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, [triggered, reduceMotion]);
+
+  let globalNonSpace = 0;
+
+  return (
+    <>
+      <span className={styles.srOnly}>AUTONOMY, FROM THE SILICON UP</span>
+      <span className={styles.decodeBoard} aria-hidden="true">
+        {HERO_LINES.map((words, lineIdx) => {
+          const renderedWords = words.map((word, wordIdx) => {
+            const chars = word.split('').map((targetChar) => {
+              const k = globalNonSpace++;
+              const lineDelay = lineIdx === 0 ? 180 : 280;
+              const charStart = lineDelay + k * 52;
+              const charLock = charStart + 300;
+
+              const isResolved = isCompleted || reduceMotion || elapsed >= charLock;
+              const isWave = !isResolved && elapsed >= charStart;
+              const isHidden = !isResolved && !isWave;
+
+              let charDisplay = targetChar;
+              if (isWave) {
+                const scrambleIdx =
+                  (Math.floor(elapsed / 36) + k * 7) % WAVE_GLYPHS.length;
+                charDisplay = WAVE_GLYPHS[scrambleIdx];
+              }
+
+              return (
+                <span className={styles.charBox} key={targetChar + k}>
+                  <span className={styles.charSizer} aria-hidden="true">
+                    {targetChar}
+                  </span>
+                  <span
+                    className={`${styles.decodeChar} ${
+                      isResolved
+                        ? styles.charResolved
+                        : isWave
+                        ? styles.charWave
+                        : styles.charHidden
+                    }`}
+                  >
+                    {isResolved ? targetChar : charDisplay}
+                  </span>
+                </span>
+              );
+            });
+
+            return (
+              <span key={wordIdx} className={styles.decodeWord}>
+                {chars}
+                {wordIdx < words.length - 1 && (
+                  <span className={styles.decodeSpace}>&nbsp;</span>
+                )}
+              </span>
+            );
+          });
+
+          return (
+            <span key={lineIdx} className={styles.decodeRow}>
+              {renderedWords}
+            </span>
+          );
+        })}
+      </span>
+    </>
+  );
+}
+
 /* ───────────── 1. Hero ───────────── */
 
 function Hero() {
@@ -334,8 +451,8 @@ function Hero() {
         <div className={styles.heroVignette} />
 
         <div className={`${styles.container} ${styles.heroContent}`}>
-          <h1 className={styles.heroTitle}>
-            AUTONOMY, FROM THE SILICON UP.
+          <h1 className={styles.heroTitle} aria-label="AUTONOMY, FROM THE SILICON UP">
+            <HeroTitleCodeDecode inView={inView} />
           </h1>
         </div>
       </div>
@@ -348,25 +465,73 @@ function Hero() {
 function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const isHoveredRef = useRef(false);
+  const playPromiseRef = useRef<Promise<void> | null>(null);
+  const stopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reduceMotion = useReducedMotion();
+  const isAria = tile.id === 'aria';
   const isGcs = tile.id === 'gcs';
 
   const start = () => {
+    isHoveredRef.current = true;
+    if (stopTimeoutRef.current) {
+      clearTimeout(stopTimeoutRef.current);
+      stopTimeoutRef.current = null;
+    }
+
     const video = videoRef.current;
     if (!video || reduceMotion) return;
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    video.play().catch(() => {});
+
+    if (video.currentTime >= (video.duration || 5) - 0.2) {
+      video.currentTime = 0;
+    }
+
+    const promise = video.play();
+    playPromiseRef.current = promise;
+    if (promise) {
+      promise
+        .then(() => {
+          if (isHoveredRef.current) {
+            setPlaying(true);
+          } else {
+            video.pause();
+            setPlaying(false);
+          }
+        })
+        .catch(() => {});
+    }
   };
+
   const stop = () => {
-    videoRef.current?.pause();
+    isHoveredRef.current = false;
     setPlaying(false);
+
+    if (stopTimeoutRef.current) clearTimeout(stopTimeoutRef.current);
+    stopTimeoutRef.current = setTimeout(() => {
+      const video = videoRef.current;
+      if (!video || isHoveredRef.current) return;
+      if (playPromiseRef.current) {
+        playPromiseRef.current
+          .then(() => {
+            if (!isHoveredRef.current) {
+              video.pause();
+              video.currentTime = 0;
+            }
+          })
+          .catch(() => {});
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    }, 350);
   };
 
   const body = (
     <>
       <div className={styles.tileMedia}>
         <img
-          className={tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage}
+          className={`${tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage} ${isAria ? styles.tileImageAria : ''}`}
           src={tile.image}
           alt={tile.alt}
           decoding="async"
@@ -380,9 +545,13 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
             muted
             loop
             playsInline
-            preload="none"
+            preload="auto"
             aria-hidden="true"
-            onPlaying={() => setPlaying(true)}
+            onPlaying={() => {
+              if (isHoveredRef.current) {
+                setPlaying(true);
+              }
+            }}
           >
             <source src={tile.video} type="video/mp4" />
           </video>
@@ -419,7 +588,13 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
         transition={{ duration: 0.7, ease: EASE_IN_OUT, delay: (index % 3) * 0.06 }}
       >
         {tile.href.startsWith('http') ? (
-          <a href={tile.href} className={className} {...handlers}>
+          <a
+            href={tile.href}
+            className={className}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...handlers}
+          >
             {body}
           </a>
         ) : (
@@ -438,7 +613,7 @@ function ProductGrid() {
       <div className={styles.container}>
         <SectionHead
           eyebrow="01 MODULAR SYSTEMS ARCHITECTURE"
-          title="ONE STACK FOR EVERY PHYSICAL MACHINE."
+          title="ONE STACK FOR EVERY PHYSICAL MACHINE"
           lede="ANSA runs the machine. DERYK decides what it should do. Certanity proves it in simulation before it moves. Spaceborn hardware carries it into the field, across air, ground, marine, and space."
         />
         <div className={styles.tiles}>
@@ -471,7 +646,7 @@ function HardwareLab() {
       <div className={styles.container}>
         <SectionHead
           eyebrow="02 EDGE COMPUTE & SILICON SPECIFICATIONS"
-          title="FLIGHT CONTROLLERS."
+          title="FLIGHT CONTROLLERS"
           lede="Board-level parameters for the ELARA flight controller line and the ARIA 50A speed controller that pairs with it. Full documentation lives on each product page."
         />
 
@@ -573,7 +748,7 @@ function RealityEngine() {
       <div className={styles.container}>
         <SectionHead
           eyebrow="03 KERNEL SIMULATION RUNTIME"
-          title="ANSA REALITY ENGINE."
+          title="ANSA REALITY ENGINE"
           lede="Scenario feeds from Certanity's 24+ domain simulators. Each one exercises the same autonomy stack that ships to hardware."
         />
 
@@ -660,7 +835,7 @@ function Closing({ onResume }: { onResume: () => void }) {
       <span id="thoth" />
       <div className={`${styles.container} ${styles.closingInner}`}>
         <Reveal>
-          <h2 className={styles.closingTitle}>BUILD THE AUTONOMOUS MACHINE FUTURE WITH US.</h2>
+          <h2 className={styles.closingTitle}>BUILD THE AUTONOMOUS MACHINE FUTURE WITH US</h2>
         </Reveal>
         <Reveal className={styles.ctaRow} delay={0.06}>
           <motion.div whileTap={PRESS} transition={SPRING}>

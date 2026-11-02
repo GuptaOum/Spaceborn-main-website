@@ -26,7 +26,7 @@ type CompanyPageLayoutProps = {
 
 const PAGE_LINKS: Record<string, string> = {
   'ANSA': '/platforms/ansa',
-  'Certanity': '/platforms/certainty',
+  'Certanity': 'https://certanity.com/',
   'Mission Studio': '/platforms/missionstudio',
   'Fleet Manager': '/platforms/fleet-manager',
   'Downloads': '/platforms/downloads',

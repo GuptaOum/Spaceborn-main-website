@@ -1,0 +1,22 @@
+# Spaceborn (Beyond Autonomous) — Cursor Rules & Skill Index
+
+You are pair programming on the Spaceborn defense-tech & aerospace autonomy platform.
+
+## 🎯 Core Design Standard (Karpathy & Kowalski Principles)
+1. **Obsidian Palette:** True blacks (`#000000`, `#050505`), card surfaces (`#0C0D0E`), hairline borders (`border-white/10`). Zero noisy neon or decorative fluff.
+2. **Typography:** Use clean geometric sans (`Inter` / `Geist`) for display and `IBM Plex Mono` for technical telemetry tags, telemetry badges (`[SYS_ACTIVE]`), and coordinates.
+3. **Hard Engineering Specifications:** Replace vague marketing copy with concrete figures (TOPS/W compute, latency in ms, payload capacity, sensor resolution, flight range).
+4. **Fluid Spring Physics:** Use Framer Motion spring dynamics (`stiffness: 100, damping: 20`) for tactile, weighted interactions.
+5. **Surgical Modifications:** Minimal, targeted changes only. Do not touch or refactor adjacent working files.
+
+## 🛠️ Installed Skills & Rules
+All skills are available as Cursor Rules (`.cursor/rules/*.mdc`) and Agent Skills (`.cursor/skills/`):
+- `@design-taste-frontend` — Anti-slop frontend art direction, elite layout, typography & palette curation.
+- `@emil-design-eng` — Emil Kowalski interaction polish, micro-animations, tactile feedback.
+- `@apple-design` — Apple-grade depth, fluid physics, translucent materials, and spatial restraint.
+- `@animate` / `@animation-performance` / `@animation-vocabulary` — Frame-budgeted 60fps spring animations.
+- `@web-design-guidelines` / `@vercel-react-best-practices` — Production Next.js 16/Turbopack performance rules.
+- `@karpathy-guidelines` — Surgical, non-bloated, verified engineering standards.
+- `@systematic-debugging` & `@verification-before-completion` — Strict pre-commit verification.
+
+You can invoke any skill via `@<skill-name>` in chat or composer.

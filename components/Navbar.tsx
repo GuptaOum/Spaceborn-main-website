@@ -157,8 +157,11 @@ export default function Navbar() {
       <nav className="navbar" ref={navRef} aria-label="Main Navigation">
         <Link href="/" className="logo" aria-label="Spaceborn Home">
           <img
-            src="https://res.cloudinary.com/kpa1wv3h/image/upload/v1783382894/spaceborn_assets/spaceborn-transparent-logo.png"
+            src="https://res.cloudinary.com/kpa1wv3h/image/upload/f_auto,q_auto:best,dpr_2.0/v1783382894/spaceborn_assets/spaceborn-transparent-logo.png"
+            srcSet="https://res.cloudinary.com/kpa1wv3h/image/upload/f_auto,q_auto:best/v1783382894/spaceborn_assets/spaceborn-transparent-logo.png 1x, https://res.cloudinary.com/kpa1wv3h/image/upload/f_auto,q_auto:best,dpr_2.0/v1783382894/spaceborn_assets/spaceborn-transparent-logo.png 2x"
             alt="Spaceborn Logo"
+            width={142}
+            height={18}
           />
         </Link>
 
