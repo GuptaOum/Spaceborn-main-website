@@ -466,18 +466,14 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   const tileRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const isHoveredRef = useRef(false);
   const playPromiseRef = useRef<Promise<void> | null>(null);
-  const stopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reduceMotion = useReducedMotion();
   const isAria = tile.id === 'aria';
   const isGcs = tile.id === 'gcs';
 
-  // Mobile In-View Auto-Playback: Plays video when scrolled into view on mobile
+  // Continuous In-View Auto-Playback across ALL viewports (phone, tablet, laptop, desktop)
   useEffect(() => {
     if (!tile.video || reduceMotion) return;
-    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (!isTouch) return;
 
     const el = tileRef.current;
     const video = videoRef.current;
@@ -494,12 +490,11 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
               .then(() => setPlaying(true))
               .catch(() => {});
           }
-        } else {
-          video.pause();
-          setPlaying(false);
+          // Never stop playing once the user scrolls to it (Anduril continuous playback)
+          observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.05 }
     );
 
     observer.observe(el);
@@ -507,59 +502,11 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   }, [tile.video, reduceMotion]);
 
   const start = () => {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    isHoveredRef.current = true;
-    if (stopTimeoutRef.current) {
-      clearTimeout(stopTimeoutRef.current);
-      stopTimeoutRef.current = null;
-    }
-
     const video = videoRef.current;
     if (!video || reduceMotion) return;
-
-    if (video.currentTime >= (video.duration || 5) - 0.2) {
-      video.currentTime = 0;
+    if (video.paused) {
+      video.play().catch(() => {});
     }
-
-    const promise = video.play();
-    playPromiseRef.current = promise;
-    if (promise) {
-      promise
-        .then(() => {
-          if (isHoveredRef.current) {
-            setPlaying(true);
-          } else {
-            video.pause();
-            setPlaying(false);
-          }
-        })
-        .catch(() => {});
-    }
-  };
-
-  const stop = () => {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    isHoveredRef.current = false;
-    setPlaying(false);
-
-    if (stopTimeoutRef.current) clearTimeout(stopTimeoutRef.current);
-    stopTimeoutRef.current = setTimeout(() => {
-      const video = videoRef.current;
-      if (!video || isHoveredRef.current) return;
-      if (playPromiseRef.current) {
-        playPromiseRef.current
-          .then(() => {
-            if (!isHoveredRef.current) {
-              video.pause();
-              video.currentTime = 0;
-            }
-          })
-          .catch(() => {});
-      } else {
-        video.pause();
-        video.currentTime = 0;
-      }
-    }, 350);
   };
 
   const body = (
@@ -603,7 +550,7 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
     </>
   );
 
-  const handlers = { onPointerEnter: start, onPointerLeave: stop, onFocus: start, onBlur: stop };
+  const handlers = { onPointerEnter: start, onFocus: start };
   const className = `${styles.tile} ${styles[tile.size]} ${isGcs ? styles.tileGcs : ''}`;
 
   return (
