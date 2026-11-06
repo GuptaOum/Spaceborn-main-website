@@ -14,6 +14,7 @@
   --sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-load: cubic-bezier(0.19, 1, 0.22, 1);
 
   background: #000000;
   color: var(--text-primary);
@@ -219,6 +220,14 @@
 
 .tileClip {
   height: 100%;
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity 1s var(--ease-load), transform 1s var(--ease-load);
+}
+
+.tileClipShown {
+  opacity: 1;
+  transform: none;
 }
 
 .tile {
@@ -260,12 +269,21 @@
   transform: translateZ(0);
 }
 
+.tileImage,
+.tileImageContain {
+  transition: opacity 1s var(--ease-load);
+}
+
 .tileImageContain {
   position: absolute;
   inset: 10% 10% 22%;
   width: 80%;
   height: 68%;
   object-fit: contain;
+}
+
+.tileImagePending {
+  opacity: 0;
 }
 
 .tileImageAria {
@@ -279,7 +297,7 @@
 .tileVideo {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 1s var(--ease-load);
   will-change: opacity;
 }
 
@@ -723,6 +741,81 @@
 
 .simMobileTabs {
   display: none;
+}
+
+/* ───────────── Partner marquee ───────────── */
+
+.marquee {
+  margin-top: 40px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeftToRight 80s linear infinite;
+}
+
+.marqueePaused {
+  animation-play-state: paused;
+}
+
+.marqueeGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.marqueeGroup li {
+  padding-right: clamp(40px, 4.5vw, 72px);
+  font-family: var(--sans);
+  font-size: clamp(16px, 1.5vw, 22px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.marqueeLogo {
+  display: block;
+  width: auto;
+  max-width: none;
+}
+
+@keyframes marqueeLeftToRight {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+/* Without motion, show each name once as a static wrapped row. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    padding: 0 20px;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .marqueeTrack {
+    width: auto;
+    animation: none;
+  }
+
+  .marqueeGroup {
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .marqueeGroup[aria-hidden='true'],
+  .marqueeGroup li[aria-hidden='true'] {
+    display: none;
+  }
 }
 
 /* ───────────── Closing CTA ───────────── */
@@ -1348,5 +1441,45 @@
     text-align: center;
     justify-content: center;
     font-size: 14px;
+  }
+}
+
+/* ───────────── Laptop hero: the frame's bottom edge sits below the fold ───────────── */
+
+@media (min-width: 961px) {
+  .hero {
+    --hero-overflow: 56px;
+    height: calc(100svh + var(--hero-overflow) + 20px);
+    min-height: 720px;
+  }
+
+  /* The title stays on the first screen, above the part of the frame below the fold. */
+  .heroContent {
+    padding-bottom: calc(var(--hero-overflow) + clamp(28px, 4vh, 44px));
+  }
+}
+
+/* ───────────── Section load-in ───────────── */
+
+.loadIn {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 1s var(--ease-load), transform 1s var(--ease-load);
+}
+
+.loadInShown {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadIn {
+    transform: none;
+    transition: opacity 200ms ease;
+  }
+
+  .tileClip {
+    transform: none;
+    transition: opacity 200ms ease;
   }
 }

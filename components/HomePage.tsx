@@ -11,7 +11,6 @@ import styles from './HomePage.module.css';
 
 const SPRING = { type: 'spring', stiffness: 100, damping: 20 } as const;
 const PRESS = { scale: 0.97 };
-const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const;
 
 const CLD = 'https://res.cloudinary.com/kpa1wv3h';
 const cldVideo = (path: string, width: number) =>
@@ -249,6 +248,15 @@ const SCENARIOS: Scenario[] = [
 
 const CYCLE_MS = 9000;
 
+/* Logo heights are set by eye in em, so each mark carries the same visual weight.
+   Companies without a verified official logo stay as text. */
+const PARTNERS: { name: string; logo?: string; width?: number; height?: number; em?: number }[] = [
+  { name: 'Tata Electronics', logo: '/images/partners/tata-electronics.svg', width: 228, height: 20, em: 0.85 },
+  { name: 'Weebit Nano', logo: '/images/partners/weebit-nano.svg', width: 190, height: 40, em: 1.5 },
+  { name: 'JLCPCB', logo: '/images/partners/jlcpcb.png', width: 316, height: 70, em: 1.3 },
+  { name: 'NVIDIA', logo: '/images/partners/nvidia.svg', width: 656, height: 120, em: 1.3 },
+];
+
 function useInView(ref: RefObject<Element | null>, threshold = 0.15) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -278,17 +286,69 @@ function usePlayWhen(videoRef: RefObject<HTMLVideoElement | null>, shouldPlay: b
   }, [videoRef, shouldPlay, key]);
 }
 
+/* One shared observer, so everything entering view together (a refresh, a restored
+   scroll position) is sorted and staggered top to bottom. The motion itself is CSS,
+   which stays smooth while the page is still busy loading. */
+const LOAD_STAGGER_MS = 80;
+const LOAD_MAX_DELAY_MS = 640;
+const loadCallbacks = new Map<Element, (delayMs: number) => void>();
+let loadObserver: IntersectionObserver | null = null;
+let nextLoadSlot = 0;
+
+function getLoadObserver() {
+  loadObserver ??= new IntersectionObserver(
+    (entries) => {
+      const now = performance.now();
+      entries
+        .filter((entry) => entry.isIntersecting)
+        .sort(
+          (a, b) =>
+            a.boundingClientRect.top - b.boundingClientRect.top ||
+            a.boundingClientRect.left - b.boundingClientRect.left,
+        )
+        .forEach((entry) => {
+          const start = Math.max(now, nextLoadSlot);
+          nextLoadSlot = start + LOAD_STAGGER_MS;
+          loadObserver?.unobserve(entry.target);
+          loadCallbacks.get(entry.target)?.(Math.min(start - now, LOAD_MAX_DELAY_MS));
+          loadCallbacks.delete(entry.target);
+        });
+    },
+    { rootMargin: '0px 0px -8% 0px', threshold: 0.01 },
+  );
+  return loadObserver;
+}
+
+/* Returns null until the element enters view, then its delay in ms. */
+function useLoadIn(ref: RefObject<Element | null>) {
+  const [delayMs, setDelayMs] = useState<number | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = getLoadObserver();
+    loadCallbacks.set(el, setDelayMs);
+    observer.observe(el);
+    return () => {
+      observer.unobserve(el);
+      loadCallbacks.delete(el);
+    };
+  }, [ref]);
+  return delayMs;
+}
+
 function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const delayMs = useLoadIn(ref);
+  const shown = delayMs !== null;
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ ...SPRING, delay }}
+    <div
+      ref={ref}
+      className={`${styles.loadIn} ${shown ? styles.loadInShown : ''} ${className ?? ''}`}
+      style={shown ? { transitionDelay: `${delayMs + delay * 1000}ms` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -462,12 +522,15 @@ function Hero() {
 
 /* ───────────── 2. Product grid ───────────── */
 
-function ProductTile({ tile, index }: { tile: Tile; index: number }) {
+function ProductTile({ tile }: { tile: Tile }) {
   const tileRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [imageReady, setImageReady] = useState(false);
   const playPromiseRef = useRef<Promise<void> | null>(null);
   const reduceMotion = useReducedMotion();
+  const loadDelayMs = useLoadIn(tileRef);
   const isAria = tile.id === 'aria';
   const isGcs = tile.id === 'gcs';
 
@@ -501,6 +564,18 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
     return () => observer.disconnect();
   }, [tile.video, reduceMotion]);
 
+  // Wait for a full decode so the image can never paint in strips as it fades in.
+  const revealImage = () => {
+    const image = imageRef.current;
+    if (!image) return;
+    image.decode().catch(() => {}).finally(() => setImageReady(true));
+  };
+
+  // A cached image can finish before hydration, so its load event never reaches React.
+  useEffect(() => {
+    if (imageRef.current?.complete) revealImage();
+  }, []);
+
   const start = () => {
     const video = videoRef.current;
     if (!video || reduceMotion) return;
@@ -513,10 +588,13 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
     <>
       <div className={styles.tileMedia}>
         <img
-          className={`${tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage} ${isAria ? styles.tileImageAria : ''}`}
+          ref={imageRef}
+          className={`${tile.fit === 'contain' ? styles.tileImageContain : styles.tileImage} ${isAria ? styles.tileImageAria : ''} ${imageReady ? '' : styles.tileImagePending}`}
           src={tile.image}
           alt={tile.alt}
           decoding="async"
+          onLoad={revealImage}
+          onError={() => setImageReady(true)}
           style={tile.position ? { objectPosition: tile.position } : undefined}
         />
         {tile.video && (
@@ -554,21 +632,10 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
   const className = `${styles.tile} ${styles[tile.size]} ${isGcs ? styles.tileGcs : ''}`;
 
   return (
-    <motion.div
-      ref={tileRef}
-      className={`${styles.tileCell} ${styles[tile.size]}`}
-      data-tile={tile.id}
-      initial={reduceMotion ? false : 'hidden'}
-      whileInView="shown"
-      viewport={{ once: true, margin: '-80px' }}
-    >
-      <motion.div
-        className={styles.tileClip}
-        variants={{
-          hidden: { clipPath: 'inset(0% 0% 100% 0%)' },
-          shown: { clipPath: 'inset(0% 0% 0% 0%)' },
-        }}
-        transition={{ duration: 0.7, ease: EASE_IN_OUT, delay: (index % 3) * 0.06 }}
+    <div ref={tileRef} className={`${styles.tileCell} ${styles[tile.size]}`} data-tile={tile.id}>
+      <div
+        className={`${styles.tileClip} ${loadDelayMs !== null ? styles.tileClipShown : ''}`}
+        style={loadDelayMs !== null ? { transitionDelay: `${loadDelayMs}ms` } : undefined}
       >
         {tile.href.startsWith('http') ? (
           <a
@@ -585,8 +652,8 @@ function ProductTile({ tile, index }: { tile: Tile; index: number }) {
             {body}
           </Link>
         )}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -600,8 +667,8 @@ function ProductGrid() {
           lede="ANSA runs the machine. DERYK decides what it should do. Certanity proves it in simulation before it moves. Spaceborn hardware carries it into the field, across air, ground, marine, and space."
         />
         <div className={styles.tiles}>
-          {TILES.map((tile, i) => (
-            <ProductTile key={tile.id} tile={tile} index={i} />
+          {TILES.map((tile) => (
+            <ProductTile key={tile.id} tile={tile} />
           ))}
         </div>
       </div>
@@ -633,6 +700,7 @@ function HardwareLab() {
           lede="Board-level parameters for the ELARA flight controller line and the ARIA 50A speed controller that pairs with it. Full documentation lives on each product page."
         />
 
+        <Reveal>
         <div className={styles.tabs} role="tablist" aria-label="Hardware" onKeyDown={onKeyDown}>
           {BOARDS.map((b, i) => (
             <button
@@ -709,6 +777,7 @@ function HardwareLab() {
             </motion.div>
           </AnimatePresence>
         </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -735,7 +804,7 @@ function RealityEngine() {
           lede="Scenario feeds from Certanity's 24+ domain simulators. Each one exercises the same autonomy stack that ships to hardware."
         />
 
-        <div className={styles.engine}>
+        <Reveal className={styles.engine}>
           <div
             className={styles.viewport}
             role="tabpanel"
@@ -858,9 +927,54 @@ function RealityEngine() {
               </motion.button>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
+
+      <Reveal>
+        <PartnerMarquee />
+      </Reveal>
     </section>
+  );
+}
+
+/* Two identical groups, so translating the track by 50% loops without a jump.
+   Each group repeats the names to stay wider than ultrawide screens. */
+function PartnerMarquee() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, 0);
+
+  return (
+    <div ref={ref} className={styles.marquee}>
+      <div className={`${styles.marqueeTrack} ${inView ? '' : styles.marqueePaused}`}>
+        {[0, 1].map((group) => (
+          <ul
+            key={group}
+            className={styles.marqueeGroup}
+            aria-label={group === 0 ? 'Key customers and partners' : undefined}
+            aria-hidden={group === 1 || undefined}
+          >
+            {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((partner, i) => (
+              <li key={`${partner.name}-${i}`} aria-hidden={i >= PARTNERS.length || undefined}>
+                {partner.logo ? (
+                  <img
+                    className={styles.marqueeLogo}
+                    src={partner.logo}
+                    alt={partner.name}
+                    width={partner.width}
+                    height={partner.height}
+                    decoding="async"
+                    draggable={false}
+                    style={{ height: `${partner.em}em` }}
+                  />
+                ) : (
+                  partner.name
+                )}
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
   );
 }
 
