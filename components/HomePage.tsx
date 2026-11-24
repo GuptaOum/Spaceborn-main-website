@@ -372,117 +372,6 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
-const WAVE_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/<>[]_';
-
-const HERO_LINES: string[][] = [
-  ['AUTONOMY,', 'FROM'],
-  ['THE', 'SILICON', 'UP'],
-];
-
-function HeroTitleCodeDecode({ inView }: { inView: boolean }) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const [triggered, setTriggered] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  useEffect(() => {
-    if (inView && !triggered) {
-      setTriggered(true);
-    }
-  }, [inView, triggered]);
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setIsCompleted(true);
-      return;
-    }
-    if (!triggered) return;
-
-    let animId: number;
-    const start = performance.now();
-
-    const tick = () => {
-      const now = performance.now();
-      const diff = now - start;
-      setElapsed(diff);
-
-      if (diff >= 2200) {
-        setIsCompleted(true);
-      } else {
-        animId = requestAnimationFrame(tick);
-      }
-    };
-
-    animId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animId);
-  }, [triggered, reduceMotion]);
-
-  let globalNonSpace = 0;
-
-  return (
-    <>
-      <span className={styles.srOnly}>AUTONOMY, FROM THE SILICON UP</span>
-      <span className={styles.decodeBoard} aria-hidden="true">
-        {HERO_LINES.map((words, lineIdx) => {
-          const renderedWords = words.map((word, wordIdx) => {
-            const chars = word.split('').map((targetChar) => {
-              const k = globalNonSpace++;
-              const lineDelay = lineIdx === 0 ? 180 : 280;
-              const charStart = lineDelay + k * 52;
-              const charLock = charStart + 300;
-
-              const isResolved = isCompleted || reduceMotion || elapsed >= charLock;
-              const isWave = !isResolved && elapsed >= charStart;
-              const isHidden = !isResolved && !isWave;
-
-              let charDisplay = targetChar;
-              if (isWave) {
-                const scrambleIdx =
-                  (Math.floor(elapsed / 36) + k * 7) % WAVE_GLYPHS.length;
-                charDisplay = WAVE_GLYPHS[scrambleIdx];
-              }
-
-              return (
-                <span className={styles.charBox} key={targetChar + k}>
-                  <span className={styles.charSizer} aria-hidden="true">
-                    {targetChar}
-                  </span>
-                  <span
-                    className={`${styles.decodeChar} ${
-                      isResolved
-                        ? styles.charResolved
-                        : isWave
-                        ? styles.charWave
-                        : styles.charHidden
-                    }`}
-                  >
-                    {isResolved ? targetChar : charDisplay}
-                  </span>
-                </span>
-              );
-            });
-
-            return (
-              <span key={wordIdx} className={styles.decodeWord}>
-                {chars}
-                {wordIdx < words.length - 1 && (
-                  <span className={styles.decodeSpace}>&nbsp;</span>
-                )}
-              </span>
-            );
-          });
-
-          return (
-            <span key={lineIdx} className={styles.decodeRow}>
-              {renderedWords}
-            </span>
-          );
-        })}
-      </span>
-    </>
-  );
-}
-
 /* ───────────── 1. Hero ───────────── */
 
 function Hero() {
@@ -509,12 +398,6 @@ function Hero() {
           <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 1920)} type="video/mp4" />
         </video>
         <div className={styles.heroVignette} />
-
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle} aria-label="AUTONOMY, FROM THE SILICON UP">
-            <HeroTitleCodeDecode inView={inView} />
-          </h1>
-        </div>
       </div>
     </section>
   );
