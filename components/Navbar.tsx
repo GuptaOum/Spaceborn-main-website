@@ -79,6 +79,7 @@ const CLOSE_DELAY_MS = 150;
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
@@ -86,6 +87,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
+      setScrolled(currentY > 8);
       if (openDropdown) {
         setHidden(false);
         return;
@@ -153,7 +155,9 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className={`navbar-wrapper${hidden ? ' is-hidden' : ''}`}>
+    <header
+      className={`navbar-wrapper${hidden ? ' is-hidden' : ''}${scrolled || openDropdown ? ' is-scrolled' : ''}`}
+    >
       <nav className="navbar" ref={navRef} aria-label="Main Navigation">
         <Link href="/" className="logo" aria-label="Spaceborn Home">
           <img

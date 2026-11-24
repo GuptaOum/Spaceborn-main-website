@@ -1,0 +1,430 @@
+.story {
+  --s-ground: #000000;
+  --s-raise-1: #111214;
+  --s-raise-2: #1c1d20;
+  --s-text: #f5f5f7;
+  --s-soft: #a1a1a6;
+  --s-sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --s-ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  background: transparent;
+  color: var(--s-text);
+  font-family: var(--s-sans);
+  padding: 0 clamp(24px, 2.5vw, 48px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ───────────── Intro (the one centred moment) ───────────── */
+
+.intro {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 56px) 0 0;
+  text-align: center;
+}
+
+.statement {
+  margin: 0 auto;
+  max-width: 17ch;
+  font-size: clamp(40px, 6.4vw, 92px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 36px auto 0;
+  max-width: 52ch;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  color: var(--s-text);
+  text-wrap: pretty;
+}
+
+/* ───────────── Shared ───────────── */
+
+/* Brushed-aluminium headline colour, like a MacBook body. */
+.statement,
+.headline {
+  background: linear-gradient(180deg, #fbfbfd 0%, #d9dade 38%, #a4a6ab 62%, #e4e5e8 82%, #b8babe 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.block {
+  padding: clamp(96px, 11vw, 180px) 0;
+}
+
+.headline {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.body {
+  margin: 28px 0 0;
+  max-width: 46ch;
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--s-text);
+  text-wrap: pretty;
+}
+
+/* ───────────── One stack: scroll scene ───────────── */
+
+.scene {
+  position: relative;
+  height: 240vh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 4vh, 48px);
+  padding: clamp(88px, 12vh, 116px) 0 clamp(24px, 5vh, 56px);
+}
+
+/* Both versions of the copy share one cell, so the room below never jumps. */
+.sceneHead {
+  display: grid;
+}
+
+.sceneHead > * {
+  grid-area: 1 / 1;
+}
+
+/* Headline on the left, its sentence on the right, so the copy spans the
+   width and leaves no dead half above the layers. */
+.sceneCopy {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  column-gap: clamp(32px, 6vw, 112px);
+  align-items: end;
+}
+
+.sceneCopy .headline {
+  max-width: 20ch;
+}
+
+.sceneCopy .body {
+  margin: 0;
+  justify-self: end;
+}
+
+/* The exploded layers travel only inside this room, never over the copy. */
+.slabRoom {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slabs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.scene .slab {
+  will-change: transform, opacity, filter;
+}
+
+/* Brushed graphite panels; once fused, the seams read as machined joints. */
+.slab {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(160px, 0.32fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 3vw, 48px);
+  min-height: clamp(88px, 12vh, 124px);
+  padding: 20px clamp(20px, 2.4vw, 36px);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #232428 0%, #18191c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 18px 40px -20px rgba(0, 0, 0, 0.7);
+  transform-origin: 50% 50%;
+}
+
+.slab + .slab {
+  border-top: 1px solid rgba(0, 0, 0, 0.55);
+}
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sheenBand {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.07) 45%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.07) 55%, transparent 100%);
+}
+
+.slabCategory {
+  font-size: clamp(28px, 2.8vw, 44px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.slabBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(20px, 3vw, 48px);
+}
+
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px clamp(20px, 2.4vw, 40px);
+}
+
+.markLogo {
+  display: block;
+  height: clamp(16px, 1.5vw, 22px);
+  width: auto;
+}
+
+.markText {
+  font-family: var(--font-spacex, 'D-DIN', 'DIN Alternate', var(--s-sans));
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.slabDetail {
+  max-width: 30ch;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--s-soft);
+  text-align: right;
+}
+
+.block .slabs {
+  margin-top: 48px;
+}
+
+/* ───────────── Vision: full-bleed picture ───────────── */
+
+/* A pinned, full-screen scene. Its picture fades up out of black, so it joins
+   the stack scene above without a hard edge. */
+.vision {
+  position: relative;
+  z-index: 1;
+  height: 230vh;
+  margin: 0 calc(-1 * clamp(24px, 2.5vw, 48px));
+}
+
+.visionStatic {
+  height: auto;
+  margin-top: 0;
+}
+
+.visionStage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* Fades into the page's metal background at the top and bottom edges. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+}
+
+.visionStatic .visionStage {
+  position: relative;
+}
+
+/* The picture and its animated layers keep the picture's 16:9 shape and cover
+   the screen, so the drones and lights stay on their marks at any size. */
+.visionLayers {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, calc(100svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  translate: -50% -50%;
+  will-change: transform;
+}
+
+.visionPicture,
+.visionPicture img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.visionPicture img,
+.visionPicture video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cool {
+  position: absolute;
+  inset: 0;
+  background: #2a2140;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.drone {
+  position: absolute;
+  display: block;
+  height: auto;
+  will-change: transform;
+}
+
+.droneImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sunGlow {
+  position: absolute;
+  left: 65%;
+  top: 56.7%;
+  width: 26%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 160, 0.6) 0%, rgba(255, 196, 130, 0.2) 40%, rgba(255, 170, 100, 0) 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+
+/* Set in the open sky where the deck's own title sat, in its deep navy. */
+.visionCopy {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: clamp(96px, 16svh, 180px);
+  padding: 0 clamp(24px, 2.5vw, 48px);
+  text-align: center;
+}
+
+.visionTitle {
+  margin: 0 auto;
+  max-width: 24ch;
+  font-size: clamp(22px, 2.1vw, 30px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #13203f;
+  text-wrap: balance;
+}
+
+.visionBody {
+  margin: 10px auto 0;
+  max-width: 44ch;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.5;
+  color: #2b3550;
+  text-wrap: pretty;
+}
+
+/* ───────────── Responsive ───────────── */
+
+@media (max-width: 960px) {
+  .visionCopy {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sceneCopy {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+
+  .sceneCopy .body {
+    justify-self: start;
+  }
+
+  .statement {
+    font-size: 36px;
+  }
+
+  .headline {
+    font-size: 30px;
+  }
+
+  .sceneHead {
+    top: 84px;
+  }
+
+  .slab {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-height: 0;
+    padding: 16px 18px;
+  }
+
+  .slabCategory {
+    font-size: 26px;
+  }
+
+  .slabBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .slabDetail {
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .markText {
+    font-size: 15px;
+  }
+
+  .markLogo {
+    height: 14px;
+  }
+
+  .visionCopy {
+    top: 96px;
+  }
+
+}

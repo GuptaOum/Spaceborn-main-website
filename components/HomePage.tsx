@@ -7,6 +7,7 @@ import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-
 import ResumeModal from './ResumeModal';
 import Footer from './Footer';
 import Navbar from './Navbar';
+import HomeStory from './HomeStory';
 import styles from './HomePage.module.css';
 
 const SPRING = { type: 'spring', stiffness: 100, damping: 20 } as const;
@@ -38,93 +39,37 @@ type Tile = {
 
 const TILES: Tile[] = [
   {
-    id: 'flight-controller',
-    name: 'Flight Controller',
-    tag: 'AUTONOMY SILICON',
-    desc: 'ELARA boards from STM32F7 to STM32H7, running the ANSA autonomy stack through one HAL.',
+    id: 'hardware',
+    name: 'ELARA flight controllers',
+    tag: 'Hardware',
+    desc: 'Flight controllers, ESCs and edge compute.',
     href: '/systems/flight-cont',
-    size: 'wide',
+    size: 'square',
     image: cldPoster('v1785868057/VideoProject_hzk4kg', 1600),
     video: cldVideo('v1785868057/VideoProject_hzk4kg', 1600),
     alt: 'ELARA flight controller mounted on a drone frame',
   },
   {
-    id: 'elara',
-    name: 'ELARA SB2',
-    tag: 'HIGH-PERFORMANCE H7',
-    desc: 'High-performance STM32H7 flight controller.',
-    href: '/systems/flight-cont',
-    size: 'tall',
-    image: `${CLD_USER}/image/upload/v1793623358/spaceborn_media/home/elara-sb2.webp`,
-    video: `${CLD_USER}/video/upload/v1793631026/spaceborn_media/home/elara-sb2.mp4`,
-    alt: 'ELARA SB2 flight controller on a dark surface',
-  },
-  {
-    id: 'aria',
-    name: 'ARIA 50A',
-    tag: 'MOTOR ARCHITECTURE',
-    desc: 'AM32 electronic speed controller with live current telemetry.',
-    href: '/systems/Esc-sys',
-    size: 'square',
-    image: `${CLD}/image/upload/f_auto,q_auto,w_900,c_limit/v1783382813/spaceborn_assets/ESC%2050A.png`,
-    alt: 'ARIA 50A electronic speed controller PCB',
-    fit: 'contain',
-  },
-  {
-    id: 'hpu',
-    name: 'HPU',
-    tag: 'EDGE SENSOR FUSION',
-    desc: 'Multi-sensor AI edge compute for camera, LiDAR, radar, and GNSS.',
-    href: '/systems/edgecompute',
-    size: 'square',
-    image: cldUserImg('hpu.webp'),
-    alt: 'HPU edge compute board, 3D render',
-    fit: 'contain',
-  },
-  {
-    id: 'deryk',
-    name: 'DERYK',
-    tag: 'MISSION COGNITION',
-    desc: 'Turns operator intent into executable machine action.',
-    href: 'https://spaceborn-web.vercel.app/',
-    size: 'wide',
-    image: cldPoster('v1785966524/womanAndDrone_xjbmqm', 1200),
-    video: cldVideo('v1785966524/womanAndDrone_xjbmqm', 1200),
-    alt: 'Operator collaborating with autonomous drone platform in the field',
-  },
-  {
-    id: 'certanity',
-    name: 'CERTANITY',
-    tag: 'SIMULATION RUNTIME',
-    desc: '24+ domain simulators. Every control loop is broken here before it flies.',
-    href: 'https://certanity.com/',
-    size: 'square',
-    image: cldPoster('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
-    video: cldVideo('v1785781462/Quadcopter_drone_hovers_in_tunnel_202608030904_hvg4oj', 1200),
-    alt: 'Quadcopter holding position inside a concrete tunnel',
-    position: '68% 50%',
-  },
-  {
-    id: 'elio',
-    name: 'SB ELIO',
-    tag: 'DUAL-MCU DEV BOARD',
-    desc: 'Dual-MCU development board. ESP32-S3 and RP2350 on one platform.',
-    href: '/systems/embedded-sdk',
-    size: 'square',
-    image: cldUserImg('sb-elio.webp'),
-    alt: 'SB ELIO development board',
-    fit: 'contain',
-  },
-  {
-    id: 'gcs',
-    name: 'GROUND CONTROL',
-    tag: '50 HZ DIGITAL TWIN',
-    desc: 'Live attitude and telemetry from the airframe, mirrored on a 3D digital twin at 50 Hz.',
+    id: 'software',
+    name: 'ANSA and Mission Studio',
+    tag: 'Software',
+    desc: 'Operating system, simulation and ground control.',
     href: '/platforms/missionstudio',
-    size: 'wide',
+    size: 'square',
     image: cldUserImg('gcs-twin.webp'),
     video: cldUserVid('gcs-twin'),
     alt: 'ANSA digital twin cockpit mirroring a hand-tilted IMU board on the attitude indicator and 3D drone model',
+  },
+  {
+    id: 'ai',
+    name: 'DERYK',
+    tag: 'AI',
+    desc: 'Turns operator intent into machine action.',
+    href: 'https://spaceborn-web.vercel.app/',
+    size: 'square',
+    image: cldPoster('v1785966524/womanAndDrone_xjbmqm', 1200),
+    video: cldVideo('v1785966524/womanAndDrone_xjbmqm', 1200),
+    alt: 'Operator collaborating with autonomous drone platform in the field',
   },
 ];
 
@@ -141,18 +86,34 @@ type Board = {
 
 const BOARDS: Board[] = [
   {
-    id: 'sb0',
-    tab: 'ELARA SB0',
-    name: 'ELARA SB0',
-    kind: 'Flight controller',
-    desc: '4-layer STM32F7 flight controller for advanced autonomous drones and research platforms.',
+    id: 'hpu',
+    tab: 'HPU',
+    name: 'HPU',
+    kind: 'High processing unit',
+    desc: 'Onboard compute for perception, AI vision and sensor fusion, with the I/O to take camera, LiDAR, radar and GNSS at once.',
     specs: [
-      ['MCU family', 'STM32F7'],
-      ['PCB stack-up', '4-LAYER'],
-      ['Autonomy stack', 'ANSA VIA HAL'],
+      ['Workloads', 'Perception, AI vision, sensor fusion'],
+      ['Sensors', 'Camera, LiDAR, radar, GNSS'],
+      ['Interfaces', 'USB 3, Ethernet, HDMI, USB-C, camera FPC'],
+      ['Autonomy stack', 'ANSA via HAL'],
     ],
-    href: '/systems/flight-cont',
-    image: { src: cldUserImg('elara-sb0-wide.webp'), alt: 'ELARA SB0 flight controller, top view', width: 1280, height: 960 },
+    href: '/systems/edgecompute',
+    image: { src: '/images/hardware/hpu.webp', alt: 'Spaceborn HPU high processing unit board, top view', width: 1200, height: 900 },
+  },
+  {
+    id: 'elio',
+    tab: 'SB ELIO',
+    name: 'SB ELIO',
+    kind: 'Dual-MCU AI development board',
+    desc: 'An ESP32-S3 for wireless and edge AI beside an RP2350B for real-time I/O and display, on one compact board.',
+    specs: [
+      ['Wireless MCU', 'ESP32-S3-WROOM-1'],
+      ['Real-time MCU', 'RP2350B, dual Cortex-M33'],
+      ['Connectivity', 'Wi-Fi 2.4 GHz, Bluetooth 5 LE'],
+      ['Ports', 'Dual USB-C, HDMI output'],
+    ],
+    href: '/systems/embedded-sdk',
+    image: { src: '/images/hardware/sb-elio.webp', alt: 'SB ELIO dual-MCU development board with ESP32-S3 and RP2350B', width: 1200, height: 900 },
   },
   {
     id: 'sb1',
@@ -169,22 +130,22 @@ const BOARDS: Board[] = [
     image: { src: cldUserImg('elara-sb1.webp'), alt: 'ELARA SB1 flight controller wired on the bench', width: 1190, height: 896 },
   },
   {
-    id: 'sb2',
-    tab: 'ELARA SB2',
-    name: 'ELARA SB2',
+    id: 'sb0',
+    tab: 'ELARA SB0',
+    name: 'ELARA SB0',
     kind: 'Flight controller',
-    desc: 'High-performance STM32H7 controller with increased processing headroom, expanded connectivity, and support for complex AI workloads.',
+    desc: '4-layer STM32F7 flight controller for advanced autonomous drones and research platforms.',
     specs: [
-      ['MCU family', 'STM32H7'],
-      ['Class', 'HIGH-PERFORMANCE'],
+      ['MCU family', 'STM32F7'],
+      ['PCB stack-up', '4-LAYER'],
       ['Autonomy stack', 'ANSA VIA HAL'],
     ],
     href: '/systems/flight-cont',
-    image: { src: `${CLD_USER}/image/upload/v1793623358/spaceborn_media/home/elara-sb2.webp`, alt: 'ELARA SB2 flight controller', width: 1280, height: 720 },
+    image: { src: cldUserImg('elara-sb0-wide.webp'), alt: 'ELARA SB0 flight controller, top view', width: 1280, height: 960 },
   },
   {
     id: 'aria',
-    tab: 'ARIA 50A',
+    tab: 'ARIA ESC',
     name: 'ARIA 50A',
     kind: 'Electronic speed controller',
     desc: 'Electronic speed controller with live current telemetry streamed back to the flight controller.',
@@ -216,12 +177,12 @@ type Scenario = {
 const SCENARIOS: Scenario[] = [
   {
     id: 'tunnel-drone',
-    title: 'GPS-denied tunnel navigation',
-    desc: 'When satellites disappear, autonomy takes over. Optical flow and LiDAR point clouds hold trajectory through unmapped subterranean corridors.',
-    readouts: [['GNSS', 'DENIED'], ['HOLD', 'OPTICAL FLOW'], ['TRAJECTORY', 'LOCKED']],
+    title: 'GPS-denied navigation',
+    desc: 'No satellites, no map. Visual SLAM builds the warehouse in 3D from camera and depth as the drone flies, and holds its path from that map alone.',
+    readouts: [['GNSS', 'DENIED'], ['MAPPING', 'VISUAL SLAM'], ['SENSING', 'RGB-D']],
     video: {
-      src: cldVideo('v1785966759/tunnelDrone_nhqulg', 1600),
-      poster: cldPoster('v1785966759/tunnelDrone_nhqulg', 1600),
+      src: '/videos/gps-denied-slam.mp4',
+      poster: '/videos/gps-denied-slam.webp',
     },
   },
   {
@@ -289,8 +250,8 @@ function usePlayWhen(videoRef: RefObject<HTMLVideoElement | null>, shouldPlay: b
 /* One shared observer, so everything entering view together (a refresh, a restored
    scroll position) is sorted and staggered top to bottom. The motion itself is CSS,
    which stays smooth while the page is still busy loading. */
-const LOAD_STAGGER_MS = 80;
-const LOAD_MAX_DELAY_MS = 640;
+const LOAD_STAGGER_MS = 60;
+const LOAD_MAX_DELAY_MS = 240;
 const loadCallbacks = new Map<Element, (delayMs: number) => void>();
 let loadObserver: IntersectionObserver | null = null;
 let nextLoadSlot = 0;
@@ -314,7 +275,8 @@ function getLoadObserver() {
           loadCallbacks.delete(entry.target);
         });
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.01 },
+    // Fire just before an element scrolls in, so it arrives already visible.
+    { rootMargin: '0px 0px 12% 0px', threshold: 0 },
   );
   return loadObserver;
 }
@@ -398,6 +360,7 @@ function Hero() {
           <source src={cldVideo('v1785962155/droneCircuitVid_p16yvl', 1920)} type="video/mp4" />
         </video>
         <div className={styles.heroVignette} />
+        <h1 className={styles.srOnly}>Spaceborn: the full autonomy stack for drones, rovers and robots</h1>
       </div>
     </section>
   );
@@ -506,8 +469,8 @@ function ProductTile({ tile }: { tile: Tile }) {
         <div className={styles.tileDescWrap}>
           <p className={styles.tileDesc}>{tile.desc}</p>
         </div>
+        <span className={styles.tileCta}>Learn more</span>
       </div>
-      <ArrowIcon className={styles.tileArrow} />
     </>
   );
 
@@ -545,9 +508,8 @@ function ProductGrid() {
     <section className={styles.section} id="platforms">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="01 MODULAR SYSTEMS ARCHITECTURE"
-          title="ONE STACK FOR EVERY PHYSICAL MACHINE"
-          lede="ANSA runs the machine. DERYK decides what it should do. Certanity proves it in simulation before it moves. Spaceborn hardware carries it into the field, across air, ground, marine, and space."
+          title="Each layer, at work."
+          lede="Spaceborn hardware carries the stack, ANSA and Mission Studio run it, and DERYK decides what to do next."
         />
         <div className={styles.tiles}>
           {TILES.map((tile) => (
@@ -578,9 +540,8 @@ function HardwareLab() {
     <section className={styles.section} id="systems">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="02 EDGE COMPUTE & SILICON SPECIFICATIONS"
-          title="FLIGHT CONTROLLERS"
-          lede="Board-level parameters for the ELARA flight controller line and the ARIA 50A speed controller that pairs with it. Full documentation lives on each product page."
+          title="Hardware Fleet"
+          lede="Compute, development, flight-control and motor-control boards, designed in-house to run the same ANSA stack. Full documentation lives on each product page."
         />
 
         <Reveal>
@@ -682,8 +643,7 @@ function RealityEngine() {
     <section ref={sectionRef} className={styles.section} id="simulation">
       <div className={styles.container}>
         <SectionHead
-          eyebrow="03 KERNEL SIMULATION RUNTIME"
-          title="ANSA REALITY ENGINE"
+          title="Proven in simulation first."
           lede="Scenario feeds from Certanity's 24+ domain simulators. Each one exercises the same autonomy stack that ships to hardware."
         />
 
@@ -869,7 +829,7 @@ function Closing({ onResume }: { onResume: () => void }) {
       <span id="thoth" />
       <div className={`${styles.container} ${styles.closingInner}`}>
         <Reveal>
-          <h2 className={styles.closingTitle}>BUILD THE AUTONOMOUS MACHINE FUTURE WITH US</h2>
+          <h2 className={styles.closingTitle}>Build the autonomous future with us.</h2>
         </Reveal>
         <Reveal className={styles.ctaRow} delay={0.06}>
           <motion.div whileTap={PRESS} transition={SPRING}>
@@ -900,6 +860,7 @@ export default function HomePage() {
 
       <main className={styles.page}>
         <Hero />
+        <HomeStory />
         <ProductGrid />
         <HardwareLab />
         <RealityEngine />

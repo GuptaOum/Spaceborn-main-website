@@ -221,7 +221,7 @@
   height: 100%;
   opacity: 0;
   transform: translate3d(0, 16px, 0);
-  transition: opacity 1s var(--ease-load), transform 1s var(--ease-load);
+  transition: opacity 0.7s var(--ease-load), transform 0.7s var(--ease-load);
 }
 
 .tileClipShown {
@@ -1463,7 +1463,7 @@
 .loadIn {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
-  transition: opacity 1s var(--ease-load), transform 1s var(--ease-load);
+  transition: opacity 0.7s var(--ease-load), transform 0.7s var(--ease-load);
 }
 
 .loadInShown {
@@ -1480,5 +1480,234 @@
   .tileClip {
     transform: none;
     transition: opacity 200ms ease;
+  }
+}
+
+
+/* ───────────── Remake: sentence-case headings and three category cards ───────────── */
+
+.section {
+  padding: clamp(56px, 6vw, 96px) 0;
+}
+
+.sectionHead {
+  margin-bottom: clamp(32px, 4vw, 56px);
+}
+
+.sectionTitle,
+.closingTitle {
+  max-width: 16ch;
+  font-family: var(--sans);
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: none;
+  background: linear-gradient(180deg, #fbfbfd 0%, #d9dade 38%, #a4a6ab 62%, #e4e5e8 82%, #b8babe 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sectionLede {
+  font-family: var(--sans);
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.55;
+}
+
+.closing {
+  padding: clamp(64px, 7vw, 112px) 0;
+}
+
+.tile {
+  border: 0;
+  border-radius: 14px;
+}
+
+.tileTag {
+  margin-bottom: 8px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #d4d4d8;
+}
+
+.tileTitle {
+  font-family: var(--sans);
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-transform: none;
+}
+
+/* Landscape cards, so each video shows its whole subject instead of a tall crop. */
+@media (min-width: 769px) {
+  .tiles {
+    grid-auto-rows: auto;
+  }
+
+  .tileCell.square {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Category cards: just the name at rest; the line and the action appear on hover
+   (and stay visible on touch screens, which cannot hover). */
+.tileDesc {
+  max-width: 32ch;
+  font-size: 15px;
+  color: #e4e4e7;
+}
+
+.tileCta {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 240ms var(--ease-out), max-height 300ms var(--ease-out), margin-top 300ms var(--ease-out), transform 160ms var(--ease-out);
+}
+
+.tile:hover .tileCta,
+.tile:focus-visible .tileCta {
+  max-height: 48px;
+  margin-top: 16px;
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .tileCta {
+    max-height: 48px;
+    margin-top: 14px;
+    opacity: 1;
+  }
+}
+
+.tileCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tile:active .tileCta {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .tileCta {
+    background: #e4e4e7;
+  }
+}
+
+/* One family for the whole page: the older spec tables, tabs and readouts drop
+   their monospace and tiny tracked capitals for the text face at a readable size. */
+.page {
+  --mono: var(--sans);
+  --font-body: var(--sans);
+}
+
+.readouts,
+.readouts span,
+.readouts b,
+.specTable,
+.specTable td,
+.specTable th,
+.tabLabel,
+.labKind,
+.simMobileTabLabel {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.readouts,
+.readouts span,
+.readouts b {
+  font-size: 13px;
+}
+
+/* Dark brushed-metal backdrop, lit from above like a MacBook lid: one smooth
+   radial highlight on graphite, fixed behind the whole homepage. */
+.page {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(120% 70% at 50% -12%, #34363b 0%, #1d1e22 34%, #111214 62%, #0a0a0b 100%);
+  pointer-events: none;
+}
+
+.hero,
+.section,
+.closing {
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background: transparent;
+  }
+}
+
+/* The hero video sits in a machined frame, like a display set into a
+   MacBook lid: crisp rounded corners, a hairline of light around the edge
+   that is brighter along the top, and a soft shadow lifting it off the
+   graphite. */
+.heroFrame {
+  border: 0;
+  border-radius: 22px;
+  background: #0b0b0c;
+  /* Crisp along the top and sides; the bottom dissolves into the page, so
+     the hero flows into the story below instead of stopping at an edge. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+}
+
+.heroFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.heroVignette {
+  background:
+    radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(180deg, transparent 70%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+@media (max-width: 768px) {
+  .heroFrame {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .heroFrame::after {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroFrame {
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
   }
 }
